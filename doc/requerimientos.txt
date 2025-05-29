@@ -1,0 +1,48 @@
+Requisitos Funcionales
+Carga de Archivos CSV: La aplicación debe permitir al usuario seleccionar y cargar archivos con formato CSV. 
+Visualización de Información Básica del Dataset:
+Mostrar el número total de filas (registros). 
+Mostrar el número total de columnas. 
+Listar los nombres de todas las columnas (encabezados). 
+Consultas de Datos Personalizadas:
+Proveer una interfaz para que el usuario ingrese consultas (se recomienda SQL vía DuckDB). 
+Ejecutar las consultas sobre el dataset cargado. 
+Mostrar los resultados de las consultas en un formato tabular dentro de la aplicación. 
+Visualización Gráfica de Datos:
+Generar gráficos básicos (ej. histogramas, gráficos de dispersión) a partir del dataset completo o de los resultados de las consultas. 
+Mostrar los gráficos generados dentro de la interfaz de la aplicación. 
+Compatibilidad Multiplataforma: La aplicación debe funcionar como:
+Aplicación de escritorio. 
+Aplicación web. 
+Manejo de Errores:
+Implementar manejo de errores durante la carga de archivos. 
+Implementar manejo de errores durante la ejecución de consultas. 
+Mostrar mensajes de error amigables al usuario en la interfaz. 
+Requisitos No Funcionales y Técnicos
+Interfaz de Usuario (UI):
+Desarrollar la UI utilizando el framework Flet. 
+La UI debe ser intuitiva y permitir una fácil navegación entre las funcionalidades.
+Procesamiento de Datos:
+Utilizar Pandas para la carga y manipulación de datos. 
+Utilizar NumPy (como dependencia de Pandas y para operaciones numéricas). 
+Motor de Consultas:
+Integrar DuckDB para ejecutar consultas SQL sobre DataFrames de Pandas. 
+Visualización de Datos (Librerías):
+Emplear Matplotlib para la generación de gráficos. 
+Utilizar Seaborn para gráficos estadísticos avanzados. 
+Integrar los gráficos de Matplotlib con Flet (flet.matplotlib_chart.MatplotlibChart). 
+Presentación de Tablas:
+Usar flet.DataTable para mostrar datos tabulares. 
+Empaquetado (Escritorio):
+La aplicación Flet debe poder ser empaquetada como un ejecutable de escritorio. 
+Estructura del Proyecto:
+Seguir una estructura de directorios modular que separe la lógica de la UI (app) de la lógica de negocio (core).
+Calidad de Código:
+Utilizar pytest para pruebas automatizadas. 
+Emplear herramientas de linting y formateo como Black, Flake8, e isort. 
+Control de Versiones:
+Utilizar Git desde el inicio del proyecto. 
+Gestión de Dependencias:
+Utilizar un entorno virtual y un sistema de gestión de dependencias (ej. pyproject.toml con Poetry/PDM o requirements.txt). 
+Documentación:
+Mantener comentarios en el código y un archivo README.md con la descripción del proyecto e instrucciones. 

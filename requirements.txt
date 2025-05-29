@@ -1,0 +1,115 @@
+# Interfaz de usuario
+flet==0.28.2              # Framework principal para UI web y escritorio
+flet-desktop==0.28.2      # Soporte para empaquetar como aplicación de escritorio
+flet-web==0.28.2          # Versión web del framework Flet
+flet-webview==0.1.0       # Integración con WebView (si se usa)
+flet-core==0.24.1         # Núcleo interno del framework Flet
+flet-cli==0.28.2          # Interfaz de línea de comandos para Flet
+
+# Manipulación y análisis de datos
+pandas==2.2.3             # Manipulación de datos
+numpy==2.2.6              # Cálculos numéricos (usado por pandas)
+duckdb==1.2.2             # Consultas SQL sobre DataFrames
+scipy==1.15.3             # Cálculos numéricos avanzados
+
+# Visualización de datos
+matplotlib==3.10.3        # Gráficos básicos
+seaborn==0.13.2           # Gráficos estadísticos sobre matplotlib
+qrcode==7.4.2             # Generación de códigos QR
+pillow==11.2.1            # Manipulación de imágenes
+
+# Backend y API (si se usa FastAPI o similar)
+fastapi==0.115.12         # Framework web rápido para APIs
+starlette==0.46.2         # Framework ASGI subyacente en FastAPI
+uvicorn==0.34.2           # Servidor ASGI para correr FastAPI
+httpx==0.28.1             # Cliente HTTP asíncrono
+requests==2.32.3          # Cliente HTTP clásico
+
+# Calidad de código y herramientas de desarrollo
+black==25.1.0             # Formateador automático
+flake8==7.2.0             # Verificación de estilo de código
+isort==6.0.1              # Ordenamiento automático de imports
+pytest==8.3.5             # Testing unitario y de integración
+watchdog==4.0.2           # Observador de archivos para desarrollo en vivo
+watchfiles==1.0.5         # Alternativa ligera a watchdog
+
+# Utilidades (para consola, archivos y procesamiento general)
+tabulate==0.9.0           # Tablas en formato texto (para consola)
+reportlab==4.4.1          # Generación de PDFs
+openpyxl==3.1.5           # Leer y escribir archivos Excel modernos
+xlrd==2.0.1               # Leer archivos Excel antiguos
+python-dateutil==2.9.0.post0 # Manejo flexible de fechas
+arrow==1.3.0              # Manejo de fechas simplificado
+tzdata==2025.2            # Datos de zonas horarias
+pytz==2025.2              # Alternativa clásica para zonas horarias
+text-unidecode==1.3       # Conversión de texto Unicode a ASCII
+python-slugify==8.0.4     # Generación de slugs legibles
+repath==0.9.0             # Expresiones regulares en rutas
+rich==14.0.0              # Impresión colorida y avanzada en consola
+python-dotenv==1.1.0      # Cargar variables de entorno desde .env
+
+# Empaquetado (si usas build tradicional para escritorio)
+pyinstaller==6.13.0       # Crear ejecutables nativos
+pyinstaller-hooks-contrib==2025.4 # Complementos para PyInstaller
+
+# Repositorio personalizado (tu proyecto)
+#-e git+https://github.com/driosoft-pro/data_analysis.git@2cb5fabe026bded5c882d3361c95d7026b350e38#egg=analizador_datos
+
+# Gestión de entorno y dependencias (si usas Poetry o PDM)
+# poetry>=1.8.2           # Alternativa moderna a pip + requirements.txt
+# pdm>=2.12.0             # Otra alternativa moderna
+
+# Dependencias internas requeridas por paquetes anteriores (no editar manualmente)
+altgraph==0.17.4
+annotated-types==0.7.0
+anyio==4.9.0
+binaryornot==0.4.4
+certifi==2025.4.26
+chardet==5.2.0
+charset-normalizer==3.4.2
+click==8.2.0
+colorama==0.4.6
+contourpy==1.3.2
+cookiecutter==2.6.0
+cycler==0.12.1
+et_xmlfile==2.0.0
+fonttools==4.58.0
+h11==0.16.0
+httpcore==1.0.9
+httptools==0.6.4
+idna==3.10
+iniconfig==2.1.0
+Jinja2==3.1.6
+kiwisolver==1.4.8
+markdown-it-py==3.0.0
+MarkupSafe==3.0.2
+mccabe==0.7.0
+mdurl==0.1.2
+mypy_extensions==1.1.0
+oauthlib==3.2.2
+packaging==25.0
+pathspec==0.12.1
+pefile==2023.2.7
+platformdirs==4.3.8
+pluggy==1.6.0
+pycodestyle==2.13.0
+pydantic==2.11.4
+pydantic_core==2.33.2
+pyflakes==3.3.2
+Pygments==2.19.1
+pyparsing==3.2.3
+pypng==0.20220715.0
+PyYAML==6.0.2
+six==1.17.0
+sniffio==1.3.1
+toml==0.10.2
+types-python-dateutil==2.9.0.20250516
+typing-inspection==0.4.0
+typing_extensions==4.13.2
+urllib3==2.4.0
+websockets==15.0.1
+pywin32-ctypes==0.2.3
+
+# Notas:
+# - Puedes usar `pip freeze > requirements.txt` luego de probar todo.
+# - Si usas `pyproject.toml`, muchas versiones se pueden dejar sin fijar para evitar bloqueos de compatibilidad.
