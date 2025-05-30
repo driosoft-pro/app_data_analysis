@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 
+
 class DataLoader:
     """
     Clase encargada de cargar datos desde diferentes formatos de archivo
@@ -29,18 +30,20 @@ class DataLoader:
             file_extension = os.path.splitext(file_path)[1].lower()
             file_name = os.path.basename(file_path)
 
-            if file_extension == '.csv':
+            if file_extension == ".csv":
                 # Cargar archivo CSV
                 df = pd.read_csv(file_path)
                 print(f"DataLoader: Archivo CSV '{file_name}' cargado exitosamente.")
                 return df, file_name
-            elif file_extension == '.xlsx':
+            elif file_extension == ".xlsx":
                 # Cargar archivo XLSX (pandas usa openpyxl como motor por defecto)
                 df = pd.read_excel(file_path)
                 print(f"DataLoader: Archivo XLSX '{file_name}' cargado exitosamente.")
                 return df, file_name
             else:
-                print(f"DataLoader Error: Formato de archivo no soportado: {file_extension}")
+                print(
+                    f"DataLoader Error: Formato de archivo no soportado: {file_extension}"
+                )
                 return None, None
 
         except pd.errors.EmptyDataError:
@@ -50,5 +53,7 @@ class DataLoader:
             print(f"DataLoader Error: Error de parseo en el archivo '{file_name}': {e}")
             return None, None
         except Exception as e:
-            print(f"DataLoader Error: Error inesperado al cargar el archivo '{file_name}': {e}")
+            print(
+                f"DataLoader Error: Error inesperado al cargar el archivo '{file_name}': {e}"
+            )
             return None, None

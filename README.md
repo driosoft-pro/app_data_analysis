@@ -131,6 +131,7 @@ data_analysis/
 ├── data/                               # Datasets de ejemplo o cargados (añadir a .gitignore)
 ├── .gitignore                          # Ignora archivos y carpetas para Git
 ├── pyproject.toml                      # Configuración y dependencias (Poetry, PDM)
+├── setup.cfg                           # Configuración y dependencias (setuptools)
 ├── README.md                           # Este documento
 └── requirements.txt                    # Alternativa simple para instalar dependencias
 ```

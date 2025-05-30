@@ -3,9 +3,10 @@ import sys
 import os
 
 # Añadir el directorio raíz del proyecto al sys.path
-# Esto permite que Python encuentre los módulos 'views' y 'core' correctamente
 current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(current_dir, '..')) # Sube un nivel desde 'app'
+project_root = os.path.abspath(
+    os.path.join(current_dir, "..")
+)  
 sys.path.insert(0, project_root)
 
 from views.bar_navigation import create_navigation_rail
@@ -23,7 +24,6 @@ from core.data_loader import DataLoader
 from core.data_analyzer import DataAnalyzer
 from core.query_engine import QueryEngine
 from core.plot_generator import PlotGenerator
-from core.file_processor import FileProcessor
 
 from constants import (
     VIEW_HOME,
@@ -36,11 +36,13 @@ from constants import (
     VIEW_SEARCH,
 )
 
+
 class AppState:
     """
     Una clase simple para manejar el estado compartido de la aplicación.
     Almacena el DataFrame cargado y el nombre del archivo.
     """
+
     def __init__(self):
         self.df = None  # Aquí se almacenará el DataFrame de Pandas
         self.loaded_file_name = None  # Para almacenar el nombre del archivo cargado
@@ -50,7 +52,9 @@ class AppState:
         """Carga el DataFrame y el nombre del archivo en el estado."""
         self.df = dataframe
         self.loaded_file_name = file_name
-        print(f"AppState: DataFrame cargado desde {file_name if file_name else 'memoria'}")
+        print(
+            f"AppState: DataFrame cargado desde {file_name if file_name else 'memoria'}"
+        )
 
     def get_dataframe(self):
         """Retorna el DataFrame cargado."""
@@ -69,6 +73,7 @@ class AppState:
         )
         return self.current_theme
 
+
 def main(page: ft.Page):
     # Configuración inicial de la página
     page.title = "Data Análisis App - MugenC-Data"
@@ -83,7 +88,6 @@ def main(page: ft.Page):
     data_analyzer = DataAnalyzer()
     query_engine = QueryEngine()
     plot_generator = PlotGenerator()
-    file_processor = FileProcessor()
 
     # Referencia al NavigationRail
     navigation_rail_ref = ft.Ref[ft.NavigationRail]()
@@ -93,34 +97,35 @@ def main(page: ft.Page):
         content=ft.Text("Selecciona una opción del menú"),
         padding=ft.padding.symmetric(horizontal=20),
         alignment=ft.alignment.top_left,
-        expand=True
+        expand=True,
     )
 
     # Rutas de vista (ordenadas para coincidir con NavigationRail)
     # El orden aquí DEBE coincidir con el orden de los destinos en bar_navigation.py
     # (después del botón de tema, que es el índice 0 del rail)
     view_routes_by_index = [
-        VIEW_HOME,      # Corresponde a rail_index 1
-        VIEW_SEARCH,    # Corresponde a rail_index 2
-        VIEW_UPLOAD,    # Corresponde a rail_index 3
-        VIEW_DISPLAY,   # Corresponde a rail_index 4
-        VIEW_QUERY,     # Corresponde a rail_index 5
-        VIEW_EXPORT,    # Corresponde a rail_index 6
-        VIEW_LIBRARY,   # Corresponde a rail_index 7
-        VIEW_ABOUT,     # Corresponde a rail_index 8
+        VIEW_HOME,  # Corresponde a rail_index 1
+        VIEW_SEARCH,  # Corresponde a rail_index 2
+        VIEW_UPLOAD,  # Corresponde a rail_index 3
+        VIEW_DISPLAY,  # Corresponde a rail_index 4
+        VIEW_QUERY,  # Corresponde a rail_index 5
+        VIEW_EXPORT,  # Corresponde a rail_index 6
+        VIEW_LIBRARY,  # Corresponde a rail_index 7
+        VIEW_ABOUT,  # Corresponde a rail_index 8
     ]
 
     # Instancias de las vistas, pasando app_state y las clases de core/
     # Es crucial pasar las instancias de core a las vistas que las usarán
     home_page = HomePage(page, app_state)
     file_upload_page = FileUploadPage(page, app_state, data_loader=data_loader)
-    data_display_page = DataDisplayPage(page, app_state, data_analyzer=data_analyzer, plot_generator=plot_generator)
+    data_display_page = DataDisplayPage(
+        page, app_state, data_analyzer=data_analyzer, plot_generator=plot_generator
+    )
     query_page = QueryPage(page, app_state, query_engine=query_engine)
     library_page = LibraryPage(page, app_state)
     about_page = AboutPage(page, app_state)
     export_pdf_page = ExportPDFPage(page, app_state)
     search_page = SearchPage(page, app_state)
-
 
     # Función para cambiar de vista
     def change_view(selected_route):
@@ -146,7 +151,9 @@ def main(page: ft.Page):
         elif selected_route == VIEW_SEARCH:
             main_content_area.content = search_page
         else:
-            main_content_area.content = ft.Text(f"Error: Vista no encontrada para la ruta '{selected_route}'")
+            main_content_area.content = ft.Text(
+                f"Error: Vista no encontrada para la ruta '{selected_route}'"
+            )
 
         page.update()
 
@@ -169,7 +176,7 @@ def main(page: ft.Page):
                     destinations[0].icon = ft.Icons.DARK_MODE_OUTLINED
                     destinations[0].selected_icon = ft.Icons.DARK_MODE
                     destinations[0].label = "Tema oscuro"
-                page.update() # Asegurarse de que el icono se actualice
+                page.update()  # Asegurarse de que el icono se actualice
 
     # Función para alternar la barra de navegación
     def toggle_navigation_rail(e):
@@ -205,7 +212,7 @@ def main(page: ft.Page):
                     ft.IconButton(
                         ft.Icons.MENU,
                         on_click=toggle_navigation_rail,
-                        tooltip="Alternar barra de navegación"
+                        tooltip="Alternar barra de navegación",
                     ),
                     app_title_text,
                 ],
@@ -213,17 +220,20 @@ def main(page: ft.Page):
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             ),
             ft.Divider(height=1, color=ft.Colors.BLACK26),
-
             # Contenido principal
             ft.Row(
                 [
-                    navigation_rail_ref.current if navigation_rail_ref.current else ft.Container(),
+                    (
+                        navigation_rail_ref.current
+                        if navigation_rail_ref.current
+                        else ft.Container()
+                    ),
                     ft.VerticalDivider(width=1),
                     main_content_area,
                 ],
                 expand=True,
-                vertical_alignment=ft.CrossAxisAlignment.STRETCH
-            )
+                vertical_alignment=ft.CrossAxisAlignment.STRETCH,
+            ),
         ],
         expand=True,
     )
@@ -240,5 +250,7 @@ def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    #ft.app(target=main, assets_dir="assets")    # Para ejecutar en modo desktop
-    ft.app(target=main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)     # Para ejecutar en modo web
+    # ft.app(target=main, assets_dir="assets")    # Para ejecutar en modo desktop
+    ft.app(
+        target=main, assets_dir="assets", view=ft.AppView.WEB_BROWSER
+    )  # Para ejecutar en modo web

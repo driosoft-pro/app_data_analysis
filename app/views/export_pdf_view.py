@@ -1,42 +1,48 @@
 import flet as ft
 import pandas as pd
-import os # Para operaciones de archivo
+import os  # Para operaciones de archivo
+
 # Puedes necesitar importar librerías para la generación de PDF aquí,
 # por ejemplo, fpdf2: pip install fpdf2
 # from fpdf import FPDF
 
-class ExportPDFPage(ft.Container): # Hereda de ft.Container
+
+class ExportPDFPage(ft.Container):  # Hereda de ft.Container
     """
     Vista para la sección de Exportar PDF.
     Obtiene el DataFrame del AppState para la exportación.
     """
-    def __init__(self, page: ft.Page, app_state):
-        super().__init__(
-            padding=20,
-            expand=True,
-            alignment=ft.alignment.top_left
-        )
-        self.page = page
-        self.app_state = app_state # Acceso al estado de la app para obtener datos
-        self.export_status_text = ft.Text("")
-        self.content = self._build_content() # Establece el contenido inicial del contenedor
 
-    def _build_content(self): # Renombrado de build a _build_content
+    def __init__(self, page: ft.Page, app_state):
+        super().__init__(padding=20, expand=True, alignment=ft.alignment.top_left)
+        self.page = page
+        self.app_state = app_state  # Acceso al estado de la app para obtener datos
+        self.export_status_text = ft.Text("")
+        self.content = (
+            self._build_content()
+        )  # Establece el contenido inicial del contenedor
+
+    def _build_content(self):  # Renombrado de build a _build_content
         """
         Construye y retorna el control raíz para la vista de Exportar PDF.
         """
         return ft.Column(
             [
                 ft.Text("Exportar a PDF", size=24, weight=ft.FontWeight.BOLD),
-                ft.Text("Aquí podrás configurar y generar un informe en formato PDF con los datos cargados."),
+                ft.Text(
+                    "Aquí podrás configurar y generar un informe en formato PDF con los datos cargados."
+                ),
                 ft.ElevatedButton(
                     "Generar y Exportar PDF",
                     icon=ft.Icons.PICTURE_AS_PDF,
                     on_click=self.handle_export_pdf,
-                    tooltip="Genera un informe en PDF con los datos cargados"
+                    tooltip="Genera un informe en PDF con los datos cargados",
                 ),
                 self.export_status_text,
-                ft.Text("\nOpciones de Exportación (Placeholder):", weight=ft.FontWeight.BOLD),
+                ft.Text(
+                    "\nOpciones de Exportación (Placeholder):",
+                    weight=ft.FontWeight.BOLD,
+                ),
                 ft.Checkbox(label="Incluir tabla de datos"),
                 ft.Checkbox(label="Incluir análisis básico"),
                 ft.Checkbox(label="Incluir gráficos (si están disponibles)"),
@@ -47,8 +53,8 @@ class ExportPDFPage(ft.Container): # Hereda de ft.Container
                         ft.dropdown.Option("Horizontal (Landscape)"),
                     ],
                     label="Orientación de página",
-                    value="Vertical (Portrait)"
-                )
+                    value="Vertical (Portrait)",
+                ),
             ],
             spacing=15,
             expand=True,
@@ -64,7 +70,9 @@ class ExportPDFPage(ft.Container): # Hereda de ft.Container
         file_name = self.app_state.get_loaded_file_name()
 
         if df is None:
-            self.export_status_text.value = "Error: No hay datos cargados para exportar."
+            self.export_status_text.value = (
+                "Error: No hay datos cargados para exportar."
+            )
             self.export_status_text.color = ft.Colors.RED_ACCENT_700
             if self.page is not None:
                 self.page.update()
@@ -105,8 +113,9 @@ class ExportPDFPage(ft.Container): # Hereda de ft.Container
 
             # Simulación de éxito
             import time
-            time.sleep(2) # Simula tiempo de procesamiento
-            self.export_status_text.value = f"PDF generado exitosamente. (Simulado)" # Puedes añadir la ruta: {pdf_output_path}
+
+            time.sleep(2)  # Simula tiempo de procesamiento
+            self.export_status_text.value = f"PDF generado exitosamente. (Simulado)"  # Puedes añadir la ruta: {pdf_output_path}
             self.export_status_text.color = ft.Colors.GREEN_ACCENT_700
             print("PDF exportado (simulado)")
 

@@ -1,21 +1,20 @@
 import flet as ft
-import pandas as pd
 
-class LibraryPage(ft.Container): # Hereda de ft.Container
+
+class LibraryPage(ft.Container):  # Hereda de ft.Container
     """
     Vista para mostrar información sobre la "Biblioteca" o librerías usadas.
     """
+
     def __init__(self, page: ft.Page, app_state):
-        super().__init__(
-            padding=20,
-            expand=True,
-            alignment=ft.alignment.top_left
-        )
+        super().__init__(padding=20, expand=True, alignment=ft.alignment.top_left)
         self.page = page
         self.app_state = app_state
-        self.content = self._build_content() # Establece el contenido inicial del contenedor
+        self.content = (
+            self._build_content()
+        )  # Establece el contenido inicial del contenedor
 
-    def _build_content(self): # Renombrado de build a _build_content
+    def _build_content(self):  # Renombrado de build a _build_content
         """
         Construye y retorna el control raíz para la vista de Biblioteca.
         """
@@ -24,7 +23,7 @@ class LibraryPage(ft.Container): # Hereda de ft.Container
             ("Flet", "Framework para construir interfaces de usuario interactivas."),
             ("Flet-desktop", "Soporte para empaquetar como aplicación de escritorio."),
             ("Flet-webview", "Integración con WebView (si se usa)."),
-            ("Flet-core", "Core de flet."),	
+            ("Flet-core", "Core de flet."),
             ("Pandas", "Para manipulación y análisis de datos."),
             ("DuckDB", "Para consultas SQL sobre DataFrames."),
             ("ReportLab", "Para generación de PDFs."),
@@ -49,10 +48,10 @@ class LibraryPage(ft.Container): # Hereda de ft.Container
             library_controls.append(
                 ft.Text(lib_name, weight=ft.FontWeight.BOLD, size=16)
             )
+            library_controls.append(ft.Text(lib_desc, selectable=True))
             library_controls.append(
-                ft.Text(lib_desc, selectable=True)
+                ft.Divider(height=5, thickness=0.5, color=ft.Colors.OUTLINE_VARIANT)
             )
-            library_controls.append(ft.Divider(height=5, thickness=0.5, color=ft.Colors.OUTLINE_VARIANT))
 
         content_column = ft.Column(
             [
@@ -61,7 +60,7 @@ class LibraryPage(ft.Container): # Hereda de ft.Container
                     "Esta aplicación se construye sobre el poder de Python y el ecosistema de código abierto. "
                     "Algunas de las tecnologías clave incluyen:",
                     selectable=True,
-                    color=ft.Colors.ON_SURFACE_VARIANT
+                    color=ft.Colors.ON_SURFACE_VARIANT,
                 ),
                 ft.Divider(height=15, thickness=1, color=ft.Colors.OUTLINE_VARIANT),
                 *library_controls,
@@ -70,13 +69,13 @@ class LibraryPage(ft.Container): # Hereda de ft.Container
                 ft.Text(
                     "Este listado de librerías puede variar segun la version de la aplicación. ",
                     selectable=True,
-                    color=ft.Colors.ON_SURFACE_VARIANT
+                    color=ft.Colors.ON_SURFACE_VARIANT,
                 ),
             ],
             spacing=10,
             expand=True,
             scroll=ft.ScrollMode.ADAPTIVE,
-            horizontal_alignment=ft.CrossAxisAlignment.START
+            horizontal_alignment=ft.CrossAxisAlignment.START,
         )
 
-        return content_column # Retorna la columna directamente
+        return content_column  # Retorna la columna directamente

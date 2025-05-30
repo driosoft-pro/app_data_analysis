@@ -1,5 +1,6 @@
 import pandas as pd
-import duckdb # Necesitas instalar duckdb: pip install duckdb
+import duckdb
+
 
 class QueryEngine:
     """
@@ -24,16 +25,18 @@ class QueryEngine:
             duckdb.Error: Si hay un error en la ejecución de la consulta SQL.
         """
         if df is None or df.empty:
-            raise ValueError("QueryEngine Error: No hay un DataFrame cargado o está vacío para consultar.")
+            raise ValueError(
+                "QueryEngine Error: No hay un DataFrame cargado o está vacío para consultar."
+            )
 
         try:
             # Conectar a una base de datos DuckDB en memoria
             # DuckDB permite registrar DataFrames de Pandas como tablas temporales
             # y luego consultarlas usando SQL.
-            con = duckdb.connect(database=':memory:', read_only=False)
+            con = duckdb.connect(database=":memory:", read_only=False)
 
             # Registrar el DataFrame de Pandas como una tabla temporal llamada 'my_table'
-            con.register('my_table', df)
+            con.register("my_table", df)
 
             # Ejecutar la consulta SQL
             result_df = con.execute(query_string).fetchdf()
@@ -41,7 +44,9 @@ class QueryEngine:
             # Cerrar la conexión (libera recursos)
             con.close()
 
-            print(f"QueryEngine: Consulta SQL ejecutada exitosamente. Filas resultantes: {len(result_df)}")
+            print(
+                f"QueryEngine: Consulta SQL ejecutada exitosamente. Filas resultantes: {len(result_df)}"
+            )
             return result_df
         except duckdb.Error as e:
             print(f"QueryEngine Error: Error al ejecutar la consulta SQL: {e}")
