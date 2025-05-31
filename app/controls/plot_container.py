@@ -45,11 +45,11 @@ class PlotContainer(ft.Container):
                 ft.Image(
                     ref=self.image_ref,
                     src_base64=self.plot_base64,
-                    fit=ft.ImageFit.CONTAIN,  # Ajusta la imagen dentro del espacio disponible
-                    expand=True,  # Permite que la imagen se expanda verticalmente
+                    fit=ft.ImageFit.CONTAIN,
+                    expand=True,
                 ),
             ],
-            expand=True,  # Permite que el Column se expanda verticalmente
+            expand=True,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=10,
         )
@@ -141,8 +141,8 @@ if __name__ == "__main__":
                     ),
                     ft.Container(
                         content=plot_control,
-                        expand=True,  # Permite que el control personalizado se expanda
-                        height=450,  # Altura fija para la prueba
+                        expand=True,
+                        height=450,
                         width=700,
                         alignment=ft.alignment.center,
                     ),

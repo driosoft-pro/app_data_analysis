@@ -3,7 +3,6 @@ import pandas as pd
 from typing import Optional
 
 
-# Ahora hereda directamente de ft.Container
 class DataTableCustom(ft.Container):
     """
     Control personalizado de Flet para mostrar un DataFrame de Pandas
@@ -64,7 +63,7 @@ class DataTableCustom(ft.Container):
             sort_ascending=True,
             heading_row_color=ft.Colors.BLUE_GREY_100,
             data_row_color={"hovered": ft.Colors.BLUE_GREY_50},
-            show_checkbox_column=False,  # Opcional: si necesitas checkboxes
+            show_checkbox_column=False,  
             # Añadir scroll horizontal si la tabla es más ancha que el espacio disponible
             horizontal_scroll_mode=ft.ScrollMode.ADAPTIVE,  # type: ignore
         )
@@ -81,11 +80,11 @@ class DataTableCustom(ft.Container):
                 # y que el scroll horizontal funcione correctamente.
                 ft.Row(
                     [data_table],
-                    expand=True,  # Permite que el Row se expanda horizontalmente
-                    scroll=ft.ScrollMode.ADAPTIVE,  # Permite scroll vertical si la tabla es muy alta
+                    expand=True,
+                    scroll=ft.ScrollMode.ADAPTIVE,
                 ),
             ],
-            expand=True,  # Permite que el Column se expanda verticalmente
+            expand=True,
             spacing=10,
         )
 
@@ -97,113 +96,5 @@ class DataTableCustom(ft.Container):
         self.df = new_df
         if new_title:
             self.title = new_title
-        self.content = self._build_content()  # Reconstruye el contenido
-        self.update()  # Llama a update para que Flet redibuje el control
-
-
-# Ejemplo de uso (solo para pruebas, no se ejecuta en la aplicación principal)
-if __name__ == "__main__":
-
-    def main(page: ft.Page):
-        page.title = "Custom DataTable Test"
-        page.vertical_alignment = ft.MainAxisAlignment.CENTER
-        page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-        page.window_width = 800  # type: ignore
-        page.window_height = 600  # type: ignore
-
-        # DataFrame de prueba
-        data = {
-            "Nombre": [
-                "Alice",
-                "Bob",
-                "Charlie",
-                "David",
-                "Eve",
-                "Frank",
-                "Grace",
-                "Heidi",
-                "Ivan",
-                "Judy",
-                "Kevin",
-                "Liam",
-                "Mia",
-                "Noah",
-                "Olivia",
-            ],
-            "Edad": [25, 30, 35, 28, 22, 45, 29, 31, 26, 33, 38, 27, 24, 36, 41],
-            "Ciudad de Residencia Muy Larga": [
-                "New York City, NY",
-                "London, UK",
-                "Paris, France",
-                "Berlin, Germany",
-                "Tokyo, Japan",
-                "Sydney, Australia",
-                "Rio de Janeiro, Brazil",
-                "Cairo, Egypt",
-                "Moscow, Russia",
-                "Beijing, China",
-                "Rome, Italy",
-                "Madrid, Spain",
-                "Toronto, Canada",
-                "Mexico City, Mexico",
-                "Buenos Aires, Argentina",
-            ],
-            "Salario Anual Muy Alto ($)": [
-                50000,
-                60000,
-                75000,
-                55000,
-                48000,
-                90000,
-                52000,
-                62000,
-                70000,
-                58000,
-                85000,
-                53000,
-                49000,
-                78000,
-                65000,
-            ],
-            "Experiencia (años)": [3, 7, 10, 5, 2, 20, 6, 8, 4, 9, 15, 3, 1, 12, 18],
-        }
-        test_df = pd.DataFrame(data)
-
-        # Instancia del control personalizado
-        custom_table = DataTableCustom(df=test_df, title="Datos de Empleados")
-
-        # Botón para simular la actualización del DataFrame
-        def update_table(e):
-            new_data = {
-                "Nombre": ["Zoe", "Yara"],
-                "Edad": [21, 34],
-                "Ciudad de Residencia Muy Larga": ["Dubai, UAE", "Seoul, South Korea"],
-                "Salario Anual Muy Alto ($)": [45000, 72000],
-                "Experiencia (años)": [1, 9],
-            }
-            new_df = pd.DataFrame(new_data)
-            custom_table.update_dataframe(new_df, "Nuevos Datos de Empleados")
-            page.update()
-
-        page.add(
-            ft.Column(
-                [
-                    ft.Text(
-                        "Ejemplo de DataTableCustom", size=24, weight=ft.FontWeight.BOLD
-                    ),
-                    ft.Container(
-                        content=custom_table,
-                        expand=True,  # Permite que el control personalizado se expanda
-                        height=400,  # Altura fija para la prueba, en la app real será expandido
-                        width=700,
-                        alignment=ft.alignment.center,
-                    ),
-                    ft.ElevatedButton("Actualizar Tabla", on_click=update_table),
-                ],
-                expand=True,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                alignment=ft.MainAxisAlignment.CENTER,
-            )
-        )
-
-    ft.app(target=main)
+        self.content = self._build_content()
+        self.update()
