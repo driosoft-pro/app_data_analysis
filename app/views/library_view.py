@@ -22,7 +22,7 @@ class LibraryPage(ft.Container):  # Hereda de ft.Container
             ("Python", "El lenguaje de programación que impulsa toda la aplicación."),
             ("Flet", "Framework para construir interfaces de usuario interactivas."),
             ("Flet-desktop", "Soporte para empaquetar como aplicación de escritorio."),
-            ("Flet-webview", "Integración con WebView (si se usa)."),
+            ("Flet-webview", "Integración con WebView."),
             ("Flet-core", "Core de flet."),
             ("Pandas", "Para manipulación y análisis de datos."),
             ("DuckDB", "Para consultas SQL sobre DataFrames."),
