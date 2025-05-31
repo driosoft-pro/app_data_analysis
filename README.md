@@ -61,10 +61,9 @@ Este proyecto es una aplicación de escritorio y web construida con [Python](htt
 > - black
 > - flake8
 > - isort
-> - ReportLab 
 > - openpyxl
 > - xlrd
-
+> - fpdf2
 
 
 ## ⚙️ Características de Librerías Necesarias
@@ -93,7 +92,7 @@ Este proyecto es una aplicación de escritorio y web construida con [Python](htt
 - [`tabulate`](https://pypi.org/project/tabulate/): Impresión de tablas en consola.tabulate
 
 ### Utilidades
-- [`ReportLab`](https://www.reportlab.com/): Generación de PDFs.
+- [`fpdf2`](https://github.com/PyFPDF/fpdf): Generación de PDFs.
 - [`openpyxl`](https://openpyxl.readthedocs.io/en/stable/): Leer y escribir archivos Excel.
 - [`xlrd`](https://pypi.org/project/xlrd/): Leer y escribir archivos Excel.
 - [`reportlab`](https://pypi.org/project/reportlab/): Generación de PDFs.

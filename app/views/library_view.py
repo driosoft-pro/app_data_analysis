@@ -40,6 +40,7 @@ class LibraryPage(ft.Container):  # Hereda de ft.Container
             ("ReportLab", "Para generación de PDFs."),
             ("openpyxl", "Para leer y escribir archivos Excel."),
             ("xlrd", "Para leer archivos Excel (antiguos)."),
+            ("fpdf2", "Para generar PDFs."),
             ("time", "Para medir tiempos."),
         ]
 
