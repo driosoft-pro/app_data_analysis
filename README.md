@@ -2,7 +2,7 @@
 
 ![homeDark.png](app/assets/img/homeLight.png)
 ![homeDark.png](app/assets/img/homeDark.png)
-![homeDark.png](app/assets/img/analysis.png)
+![homeDark.png](app/assets/img/analisisBasic.png)
 ![homeDark.png](app/assets/img/library.png)
 ![homeDark.png](app/assets/img/about.png)
 
