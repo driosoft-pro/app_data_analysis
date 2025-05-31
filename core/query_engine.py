@@ -7,7 +7,7 @@ class QueryEngine:
     Clase encargada de ejecutar consultas SQL sobre un DataFrame de Pandas
     utilizando DuckDB.
     """
-
+    
     def execute_query_on_dataframe(self, df: pd.DataFrame, query_string: str):
         """
         Ejecuta una consulta SQL sobre el DataFrame de Pandas proporcionado.
@@ -41,7 +41,7 @@ class QueryEngine:
             # Ejecutar la consulta SQL
             result_df = con.execute(query_string).fetchdf()
 
-            # Cerrar la conexión (libera recursos)
+            # Cerrar la conexión
             con.close()
 
             print(
@@ -50,7 +50,6 @@ class QueryEngine:
             return result_df
         except duckdb.Error as e:
             print(f"QueryEngine Error: Error al ejecutar la consulta SQL: {e}")
-            # Puedes relanzar la excepción si quieres que el error se propague a la UI
             raise
         except Exception as e:
             print(f"QueryEngine Error: Error inesperado en el motor de consultas: {e}")

@@ -11,11 +11,11 @@ class PlotGenerator:
     Clase encargada de generar diferentes tipos de gráficos
     a partir de un DataFrame de Pandas.
     """
-
+    
     def __init__(self):
         # Configuración básica de Matplotlib para mejorar la apariencia
-        plt.style.use("seaborn-v0_8-darkgrid")  # Un estilo visual agradable
-        plt.rcParams["figure.figsize"] = (10, 6)  # Tamaño por defecto de las figuras
+        plt.style.use("seaborn-v0_8-darkgrid")
+        plt.rcParams["figure.figsize"] = (10, 6)
         plt.rcParams["font.size"] = 12
         plt.rcParams["axes.labelsize"] = 14
         plt.rcParams["axes.titlesize"] = 16
@@ -36,10 +36,10 @@ class PlotGenerator:
             str: Una cadena base64 que representa la imagen PNG de la figura.
         """
         buf = io.BytesIO()
-        fig.savefig(buf, format="png", bbox_inches="tight", dpi=100)  # dpi para calidad
+        fig.savefig(buf, format="png", bbox_inches="tight", dpi=100) 
         buf.seek(0)
         img_base64 = base64.b64encode(buf.read()).decode("utf-8")
-        plt.close(fig)  # Cierra la figura para liberar memoria
+        plt.close(fig)
         return img_base64
 
     def generate_histogram(
@@ -70,7 +70,7 @@ class PlotGenerator:
         fig, ax = plt.subplots()
         sns.histplot(
             data=df, x=column, kde=True, ax=ax
-        )  # Seaborn recomienda usar 'data' y 'x'
+        )
         ax.set_title(title or f"Histograma de {column}")
         ax.set_xlabel(column)
         ax.set_ylabel("Frecuencia")

@@ -6,7 +6,7 @@ class FileProcessor:
     """
     Clase encargada de procesar archivos, incluyendo la conversión de formatos.
     """
-
+    
     def convert_xlsx_to_csv(self, input_xlsx_path: str, output_csv_path: str):
         """
         Convierte un archivo XLSX a CSV.
@@ -37,7 +37,7 @@ class FileProcessor:
             # Guardar el DataFrame como CSV
             df.to_csv(
                 output_csv_path, index=False
-            )  # index=False para no escribir el índice de Pandas
+            ) 
             print(
                 f"FileProcessor: Archivo XLSX '{os.path.basename(input_xlsx_path)}' convertido a CSV exitosamente en '{output_csv_path}'."
             )

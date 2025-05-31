@@ -1,48 +1,76 @@
+Especificación de Requisitos del Proyecto
+
 Requisitos Funcionales
-Carga de Archivos CSV: La aplicación debe permitir al usuario seleccionar y cargar archivos con formato CSV. 
-Visualización de Información Básica del Dataset:
-Mostrar el número total de filas (registros). 
-Mostrar el número total de columnas. 
-Listar los nombres de todas las columnas (encabezados). 
-Consultas de Datos Personalizadas:
-Proveer una interfaz para que el usuario ingrese consultas (se recomienda SQL vía DuckDB). 
-Ejecutar las consultas sobre el dataset cargado. 
-Mostrar los resultados de las consultas en un formato tabular dentro de la aplicación. 
-Visualización Gráfica de Datos:
-Generar gráficos básicos (ej. histogramas, gráficos de dispersión) a partir del dataset completo o de los resultados de las consultas. 
-Mostrar los gráficos generados dentro de la interfaz de la aplicación. 
-Compatibilidad Multiplataforma: La aplicación debe funcionar como:
-Aplicación de escritorio. 
-Aplicación web. 
-Manejo de Errores:
-Implementar manejo de errores durante la carga de archivos. 
-Implementar manejo de errores durante la ejecución de consultas. 
-Mostrar mensajes de error amigables al usuario en la interfaz. 
+
+1. Carga de Archivos CSV
+La aplicación debe permitir al usuario seleccionar y cargar archivos con formato .csv.
+
+2. Visualización de Información Básica del Dataset
+Mostrar el número total de filas (registros).
+Mostrar el número total de columnas.
+Listar los nombres de todas las columnas (encabezados).
+
+3. Consultas de Datos Personalizadas
+Proveer una interfaz para que el usuario ingrese consultas (preferiblemente SQL vía DuckDB).
+Ejecutar las consultas sobre el dataset cargado.
+Mostrar los resultados en un formato tabular dentro de la aplicación.
+
+4. Visualización Gráfica de Datos
+Generar gráficos básicos como histogramas y gráficos de dispersión a partir del dataset o los resultados de las consultas.
+Mostrar los gráficos generados dentro de la interfaz de la aplicación.
+
+5. Compatibilidad Multiplataforma
+La aplicación debe funcionar como:
+Aplicación de escritorio.
+Aplicación web.
+
+6. Manejo de Errores
+Implementar manejo de errores durante la carga de archivos.
+Implementar manejo de errores durante la ejecución de consultas.
+Mostrar mensajes de error amigables al usuario.
+
 Requisitos No Funcionales y Técnicos
-Interfaz de Usuario (UI):
-Desarrollar la UI utilizando el framework Flet. 
-La UI debe ser intuitiva y permitir una fácil navegación entre las funcionalidades.
-Procesamiento de Datos:
-Utilizar Pandas para la carga y manipulación de datos. 
-Utilizar NumPy (como dependencia de Pandas y para operaciones numéricas). 
-Motor de Consultas:
-Integrar DuckDB para ejecutar consultas SQL sobre DataFrames de Pandas. 
-Visualización de Datos (Librerías):
-Emplear Matplotlib para la generación de gráficos. 
-Utilizar Seaborn para gráficos estadísticos avanzados. 
-Integrar los gráficos de Matplotlib con Flet (flet.matplotlib_chart.MatplotlibChart). 
-Presentación de Tablas:
-Usar flet.DataTable para mostrar datos tabulares. 
-Empaquetado (Escritorio):
-La aplicación Flet debe poder ser empaquetada como un ejecutable de escritorio. 
-Estructura del Proyecto:
-Seguir una estructura de directorios modular que separe la lógica de la UI (app) de la lógica de negocio (core).
-Calidad de Código:
-Utilizar pytest para pruebas automatizadas. 
-Emplear herramientas de linting y formateo como Black, Flake8, e isort. 
-Control de Versiones:
-Utilizar Git desde el inicio del proyecto. 
-Gestión de Dependencias:
-Utilizar un entorno virtual y un sistema de gestión de dependencias (ej. pyproject.toml con Poetry/PDM o requirements.txt). 
-Documentación:
-Mantener comentarios en el código y un archivo README.md con la descripción del proyecto e instrucciones. 
+
+1. Interfaz de Usuario (UI)
+Desarrollar la UI utilizando el framework Flet.
+La interfaz debe ser intuitiva y permitir una fácil navegación entre funcionalidades.
+
+2. Procesamiento de Datos
+Utilizar Pandas para la carga y manipulación de datos.
+Utilizar NumPy como dependencia de Pandas y para operaciones numéricas.
+
+3. Motor de Consultas
+Integrar DuckDB para ejecutar consultas SQL directamente sobre DataFrames de Pandas.
+
+4. Visualización de Datos
+Utilizar Matplotlib para la generación de gráficos.
+Emplear Seaborn para visualizaciones estadísticas más avanzadas.
+Integrar gráficos de Matplotlib con Flet mediante flet.matplotlib_chart.MatplotlibChart.
+
+5. Presentación de Tablas
+Usar flet.DataTable para mostrar resultados de datos tabulares.
+
+6. Empaquetado (Escritorio)
+La aplicación Flet debe poder ser empaquetada como un ejecutable para escritorio.
+
+7. Estructura del Proyecto
+Seguir una estructura modular que separe la lógica de la interfaz de usuario (app/) de la lógica de negocio (core/).
+
+8. Calidad de Código
+Implementar pruebas automatizadas utilizando pytest.
+Utilizar herramientas de linting y formateo como Black, Flake8 e isort.
+
+9. Control de Versiones
+Usar Git desde el inicio del proyecto para el control de versiones.
+
+10. Gestión de Dependencias
+Utilizar un entorno virtual y un sistema de gestión de dependencias como:
+pyproject.toml con Poetry o PDM.
+Alternativamente, un archivo requirements.txt.
+
+11. Documentación
+Mantener comentarios claros y útiles dentro del código.
+
+Incluir un archivo README.md con:
+Descripción general del proyecto.
+Instrucciones de instalación, uso y despliegue.

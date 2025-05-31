@@ -7,7 +7,7 @@ class DataLoader:
     Clase encargada de cargar datos desde diferentes formatos de archivo
     (CSV y XLSX) a un DataFrame de Pandas.
     """
-
+    
     def load_data_from_file(self, file_path: str, na_values=None):
         """
         Carga datos desde un archivo (CSV o XLSX) a un DataFrame de Pandas.

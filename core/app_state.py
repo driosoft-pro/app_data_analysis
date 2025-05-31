@@ -8,6 +8,7 @@ class AppState:
     Una clase para manejar el estado compartido de la aplicación,
     especialmente los DataFrames cargados y manipulados.
     """
+    
     def __init__(self):
         self._original_dataframe: Optional[pd.DataFrame] = None
         self._active_dataframe: Optional[pd.DataFrame] = None  # DataFrame que será manipulado
@@ -21,7 +22,8 @@ class AppState:
         """
         self._original_dataframe = dataframe
         self.loaded_file_name = file_name
-        self.create_dataframe_copy() # Crea una copia al cargar el original
+        # Crea una copia al cargar el original
+        self.create_dataframe_copy() 
         print(
             f"AppState: DataFrame original cargado desde {file_name if file_name else 'memoria'} y copia activa creada."
         )
