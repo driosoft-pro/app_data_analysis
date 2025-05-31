@@ -99,6 +99,7 @@ data_analysis/
 │   │   ├── search_view.py              # Vista de Buscar
 │   │   ├── export_pdf_view.py          # Vista para exportar PDF
 │   │   ├── file_upload_view.py         # Vista para cargar archivos
+│   │   ├── file_upload_confg.py        # Funciones de carga de archivos
 │   │   ├── data_display_view.py        # Vista para visualizar datos
 │   │   ├── library_view.py             # Vista para la biblioteca cargadas
 │   │   ├── about_view.py               # Vista de Acerca de
@@ -116,6 +117,7 @@ data_analysis/
 │   ├── data_analyzer.py                # Análisis de datos
 │   ├── query_engine.py                 # Motor de consulta SQL
 │   ├── file_processor.py               # Procesamiento de archivos
+│   ├── app_state.py                    # Procesamiento de archivos
 │   └── plot_generator.py               # Generación de gráficos
 │
 ├── tests/                              # Pruebas unitarias 
@@ -152,6 +154,12 @@ python -m app.main
 pytest                  # Ejecutar todas las pruebas
 pytest -v --tb=short    # Ejecutar pruebas con detalles adicionales
 ```
+
+---
+
+# 🗒️ Notas:
+# - Puedes usar `pip freeze > requirements.txt` luego de probar todo.
+# - Si usas `pyproject.toml`, muchas versiones se pueden dejar sin fijar para evitar bloqueos de compatibilidad.
 
 ---
 

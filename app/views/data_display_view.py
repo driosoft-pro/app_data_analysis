@@ -1,309 +1,204 @@
 import flet as ft
-import pandas as pd
 from core.data_analyzer import DataAnalyzer
 from core.plot_generator import PlotGenerator
-from app.controls.data_table_custom import DataTableCustom
-from app.controls.plot_container import PlotContainer
 
 
-class DataDisplayPage(ft.Container):  # Hereda de ft.Container
-    def __init__(
-        self,
-        page: ft.Page,
-        app_state,
-        data_analyzer: DataAnalyzer,
-        plot_generator: PlotGenerator,
-    ):
-        super().__init__(padding=20, expand=True, alignment=ft.alignment.top_left)
+class DataDisplayPage(ft.Container):
+    """
+    Vista para visualizar y analizar los datos cargados.
+    """
+
+    def __init__(self, page: ft.Page, app_state, data_analyzer: DataAnalyzer, plot_generator: PlotGenerator):
+        super().__init__(
+            padding=20,
+            expand=True,
+            alignment=ft.alignment.top_left
+        )
         self.page = page
         self.app_state = app_state
         self.data_analyzer = data_analyzer
         self.plot_generator = plot_generator
 
-        # Instancias de tus controles personalizados
-        self.data_table_preview = DataTableCustom(title="Vista Previa de Datos")
-        self.histogram_plot_container = PlotContainer(title="Histograma (Ejemplo)")
-        self.scatterplot_plot_container = PlotContainer(
-            title="Diagrama de Dispersión (Ejemplo)"
+        # Elementos UI
+        self.data_table_container = ft.Container(
+            content=ft.Text("Cargue un archivo para ver los datos aquí."),
+            expand=True,
+            alignment=ft.alignment.center,
+            border=ft.border.all(1, ft.Colors.GREY_300),
+            border_radius=5,
+            padding=10,
+        )
+        self.plot_container = ft.Container(
+            content=ft.Text("Seleccione opciones de visualización."),
+            expand=True,
+            alignment=ft.alignment.center,
+            border=ft.border.all(1, ft.Colors.GREY_300),
+            border_radius=5,
+            padding=10,
         )
 
-        self.tabs_content_area = ft.Container(expand=True, ref=ft.Ref())
-        self.analysis_tabs = ft.Tabs(  # Hacerlo una propiedad de la instancia
-            selected_index=0,
-            tabs=[
-                ft.Tab(text="Vista Previa Datos"),
-                ft.Tab(text="Análisis Básico"),
-                ft.Tab(text="Análisis Avanzado"),
-            ],
-        )
-        self.analysis_tabs.on_change = self._handle_tab_change  # Asignar el handler
+        # Botones de visualización/análisis
+        self.analysis_buttons = ft.ResponsiveRow([
+            ft.ElevatedButton(
+                "Ver Datos",
+                on_click=self._display_dataframe,
+                icon=ft.Icons.GRID_ON,
+                tooltip="Muestra el DataFrame cargado en una tabla.",
+                col={"sm": 12, "md": 6, "lg": 3}
+            ),
+            ft.ElevatedButton(
+                "Generar Gráfico (Ejemplo)",
+                on_click=self._generate_sample_plot,
+                icon=ft.Icons.BAR_CHART,
+                tooltip="Genera un gráfico de ejemplo (requiere datos numéricos).",
+                col={"sm": 12, "md": 6, "lg": 3}
+            ),
+            # Puedes añadir más botones para diferentes tipos de análisis o gráficos
+        ], spacing=10)
 
-        self.content = (
-            self._build_content()
-        )  # Establece el contenido inicial del contenedor
+        # Construir interfaz
+        self.content = self._build_content()
 
-    def _build_content(self):  # Renombrado de build a _build_content
+    def _build_content(self):
         """Construye la interfaz de la vista."""
-        df = self.app_state.get_dataframe()
-
-        if df is None:
-            return ft.Column(
-                [
-                    ft.Text(
-                        "Visualización de Datos", size=24, weight=ft.FontWeight.BOLD
-                    ),
-                    ft.Text(
-                        "No hay datos cargados. Por favor, carga un archivo CSV o XLSX primero desde la sección 'Cargar Archivo'."
-                    ),
-                ],
-                spacing=15,
-                expand=True,
-                scroll=ft.ScrollMode.ADAPTIVE,
-            )
-
-        # --- Contenido para la pestaña "Vista Previa Datos" ---
-        self.data_table_preview.update_dataframe(
-            df.head(10), "Primeras 10 Filas del Dataset"
-        )
-        tab_content_preview = ft.Column(
-            [self.data_table_preview],
-            spacing=10,
-            expand=True,
-            scroll=ft.ScrollMode.ADAPTIVE,
-        )
-
-        # --- Contenido para la pestaña "Análisis Básico" ---
-        df_info = self.data_analyzer.get_dataframe_info(df)
-        desc_stats_df = self.data_analyzer.get_descriptive_statistics(df)
-
-        desc_stats_text_lines = []
-        if not desc_stats_df.empty:
-            desc_stats_text_lines.append(
-                "Estadísticas Descriptivas de Columnas Numéricas:"
-            )
-            for index, row in desc_stats_df.iterrows():
-                desc_stats_text_lines.append(f"  - Columna '{index}':")
-                for stat, value in row.items():
-                    desc_stats_text_lines.append(f"    {stat}: {value:.2f}")
-        else:
-            desc_stats_text_lines.append(
-                "No hay columnas numéricas para estadísticas descriptivas."
-            )
-
-        tab_content_basic_analysis = ft.Column(
-            [
-                ft.Text(f"Número total de filas (registros): {df_info['num_rows']}"),
-                ft.Text(f"Número total de columnas: {df_info['num_cols']}"),
-                ft.Text(f"Nombres de columnas: {', '.join(df_info['columns'])}"),
-                ft.Text("Tipos de datos por columna:"),
-                *[
-                    ft.Text(f"  - {col}: {dtype}")
-                    for col, dtype in df_info["dtypes"].items()
-                ],
-                ft.Text("Valores faltantes por columna:"),
-                *[
-                    ft.Text(f"  - {col}: {count}")
-                    for col, count in df_info["missing_values"].items()
-                ],
-                ft.Divider(),
-                ft.Text("\n".join(desc_stats_text_lines)),
-            ],
-            spacing=10,
-            expand=True,
-            scroll=ft.ScrollMode.ADAPTIVE,
-        )
-
-        # --- Contenido para la pestaña "Análisis Avanzado" (con ejemplos de gráficos) ---
-        plot_elements = []
-        # Asegúrate de que las columnas existan y sean del tipo correcto antes de generar
-        if "Edad" in df.columns and pd.api.types.is_numeric_dtype(df["Edad"]):
-            hist_base64 = self.plot_generator.generate_histogram(
-                df, "Edad", title="Distribución de Edades"
-            )
-            if hist_base64:
-                self.histogram_plot_container.update_plot(
-                    hist_base64, "Histograma de Edades"
-                )
-                plot_elements.append(self.histogram_plot_container)
-        else:
-            plot_elements.append(
-                ft.Text(
-                    "No se pudo generar histograma de 'Edad' (columna no encontrada o no numérica)."
-                )
-            )
-
-        if (
-            "Edad" in df.columns
-            and "Ingresos" in df.columns
-            and pd.api.types.is_numeric_dtype(df["Edad"])
-            and pd.api.types.is_numeric_dtype(df["Ingresos"])
-        ):
-            scatter_base64 = self.plot_generator.generate_scatterplot(
-                df, "Edad", "Ingresos", title="Edad vs Ingresos"
-            )
-            if scatter_base64:
-                self.scatterplot_plot_container.update_plot(
-                    scatter_base64, "Dispersión de Edad vs Ingresos"
-                )
-                plot_elements.append(self.scatterplot_plot_container)
-        else:
-            plot_elements.append(
-                ft.Text(
-                    "No se pudo generar diagrama de dispersión de 'Edad' vs 'Ingresos' (columnas no encontradas o no numéricas)."
-                )
-            )
-
-        tab_content_advanced_analysis = ft.Column(
-            [
-                ft.Text(
-                    "Análisis Avanzado y Visualizaciones:", weight=ft.FontWeight.BOLD
-                ),
-                ft.Text("Aquí se mostrarán gráficos y análisis más complejos."),
-                ft.Divider(),
-                *plot_elements,
-            ],
-            spacing=10,
-            expand=True,
-            scroll=ft.ScrollMode.ADAPTIVE,
-        )
-
-        # Establece el contenido inicial del área de pestañas
-        # Esto se hará en _handle_tab_change o al cargar la vista por primera vez
-        # self.tabs_content_area.content = tab_content_preview
-
-        # Retorna el Column principal, ya que el contenedor padre (self) lo contiene.
         return ft.Column(
             [
-                ft.Text("Análisis Dataset", size=24, weight=ft.FontWeight.BOLD),
-                ft.Text(f"Dataset: {self.app_state.loaded_file_name or 'No cargado'}"),
-                self.analysis_tabs,
-                self.tabs_content_area,
+                ft.Text("Visualización y Análisis de Datos", size=24, weight=ft.FontWeight.BOLD),
+                ft.Divider(height=20),
+                self.analysis_buttons,
+                ft.Divider(height=20),
+                ft.Text("Tabla de Datos:", size=18, weight=ft.FontWeight.BOLD),
+                self.data_table_container,
+                ft.Divider(height=20),
+                ft.Text("Visualizaciones:", size=18, weight=ft.FontWeight.BOLD),
+                self.plot_container,
+                ft.Divider(height=20),
             ],
-            spacing=15,
+            spacing=10,
             expand=True,
             scroll=ft.ScrollMode.ADAPTIVE,
         )
 
-    def _handle_tab_change(
-        self, e
-    ):  # Renombrado de handle_tab_change a _handle_tab_change
-        """Maneja el cambio de pestaña."""
-        df = self.app_state.get_dataframe()
-        if df is None:  # Si no hay DataFrame, no intentes construir contenido dinámico
-            self.tabs_content_area.content = ft.Text(
-                "No hay datos cargados para mostrar en esta pestaña."
-            )
-            if self.page is not None:
+    def show_notification(self, message: str, color=ft.Colors.BLUE):
+        """Muestra una notificación temporal en la página."""
+        snack = ft.SnackBar(
+            content=ft.Text(message),
+            bgcolor=color,
+            duration=3000
+        )
+        snack.open = True
+        if self.page is not None:
+            self.page.add(snack)
+            self.page.update()
+
+    def _display_dataframe(self, e=None):
+        """Muestra el DataFrame activo en una tabla."""
+        # Usar get_active_dataframe() para obtener el DataFrame que se está manipulando
+        df = self.app_state.get_active_dataframe() 
+
+        if df is None:
+            self.data_table_container.content = ft.Text("No hay datos cargados para mostrar.")
+            self.show_notification("No hay datos cargados para mostrar.", ft.Colors.ORANGE)
+            if self.page:
                 self.page.update()
             return
 
-        selected_tab_index = e.control.selected_index
-        # Reconstruye el contenido de las pestañas cada vez que se cambia
-        # Esto asegura que los datos más recientes del DataFrame se reflejen
-        # y que los gráficos se generen con los datos actuales.
-        if selected_tab_index == 0:
-            self.data_table_preview.update_dataframe(
-                df.head(10), "Primeras 10 Filas del Dataset"
-            )
-            self.tabs_content_area.content = ft.Column(
-                [self.data_table_preview],
-                spacing=10,
-                expand=True,
-                scroll=ft.ScrollMode.ADAPTIVE,
-            )
-        elif selected_tab_index == 1:
-            df_info = self.data_analyzer.get_dataframe_info(df)
-            desc_stats_df = self.data_analyzer.get_descriptive_statistics(df)
-            desc_stats_text_lines = []
-            if not desc_stats_df.empty:
-                desc_stats_text_lines.append(
-                    "Estadísticas Descriptivas de Columnas Numéricas:"
-                )
-                for index, row in desc_stats_df.iterrows():
-                    desc_stats_text_lines.append(f"  - Columna '{index}':")
-                    for stat, value in row.items():
-                        desc_stats_text_lines.append(f"    {stat}: {value:.2f}")
-            else:
-                desc_stats_text_lines.append(
-                    "No hay columnas numéricas para estadísticas descriptivas."
-                )
+        try:
+            # Crear las columnas para la tabla de Flet
+            columns = [
+                ft.DataColumn(ft.Text(col), on_sort=self._on_sort_column) for col in df.columns
+            ]
 
-            self.tabs_content_area.content = ft.Column(
+            # Crear las filas para la tabla de Flet
+            rows = []
+            for index, row_data in df.iterrows():
+                cells = [ft.DataCell(ft.Text(str(cell))) for cell in row_data]
+                rows.append(ft.DataRow(cells=cells))
+
+            data_table = ft.DataTable(
+                columns=columns,
+                rows=rows,
+                sort_column_index=0,  # Puedes establecer una columna de ordenación inicial
+                sort_ascending=True,
+                heading_row_color=ft.Colors.GREY_200,
+                data_row_color=ft.Colors.BLUE_GREY_100,
+                horizontal_lines=ft.BorderSide(1, ft.Colors.GREY_300),
+                vertical_lines=ft.BorderSide(0.5, ft.Colors.GREY_300),
+                show_checkbox_column=False,
+            )
+
+            self.data_table_container.content = ft.Column(
                 [
-                    ft.Text(
-                        f"Número total de filas (registros): {df_info['num_rows']}"
-                    ),
-                    ft.Text(f"Número total de columnas: {df_info['num_cols']}"),
-                    ft.Text(f"Nombres de columnas: {', '.join(df_info['columns'])}"),
-                    ft.Text("Tipos de datos por columna:"),
-                    *[
-                        ft.Text(f"  - {col}: {dtype}")
-                        for col, dtype in df_info["dtypes"].items()
-                    ],
-                    ft.Text("Valores faltantes por columna:"),
-                    *[
-                        ft.Text(f"  - {col}: {count}")
-                        for col, count in df_info["missing_values"].items()
-                    ],
-                    ft.Divider(),
-                    ft.Text("\n".join(desc_stats_text_lines)),
+                    ft.Text(f"Mostrando datos de: {self.app_state.get_loaded_file_name()}", size=16, weight=ft.FontWeight.BOLD),
+                    ft.Container(data_table, expand=True)
                 ],
-                spacing=10,
-                expand=True,
-                scroll=ft.ScrollMode.ADAPTIVE,
+                expand=True
             )
-        elif selected_tab_index == 2:
-            plot_elements = []
-            if "Edad" in df.columns and pd.api.types.is_numeric_dtype(df["Edad"]):
-                hist_base64 = self.plot_generator.generate_histogram(
-                    df, "Edad", title="Distribución de Edades"
-                )
-                if hist_base64:
-                    self.histogram_plot_container.update_plot(
-                        hist_base64, "Histograma de Edades"
-                    )
-                    plot_elements.append(self.histogram_plot_container)
-            else:
-                plot_elements.append(
-                    ft.Text(
-                        "No se pudo generar histograma de 'Edad' (columna no encontrada o no numérica)."
-                    )
-                )
+            self.show_notification("DataFrame mostrado exitosamente.", ft.Colors.GREEN)
 
-            if (
-                "Edad" in df.columns
-                and "Ingresos" in df.columns
-                and pd.api.types.is_numeric_dtype(df["Edad"])
-                and pd.api.types.is_numeric_dtype(df["Ingresos"])
-            ):
-                scatter_base64 = self.plot_generator.generate_scatterplot(
-                    df, "Edad", "Ingresos", title="Edad vs Ingresos"
-                )
-                if scatter_base64:
-                    self.scatterplot_plot_container.update_plot(
-                        scatter_base64, "Dispersión de Edad vs Ingresos"
-                    )
-                    plot_elements.append(self.scatterplot_plot_container)
-            else:
-                plot_elements.append(
-                    ft.Text(
-                        "No se pudo generar diagrama de dispersión de 'Edad' vs 'Ingresos' (columnas no encontradas o no numéricas)."
-                    )
-                )
+        except Exception as ex:
+            self.data_table_container.content = ft.Text(f"Error al mostrar el DataFrame: {str(ex)}", color=ft.Colors.RED)
+            self.show_notification(f"Error al mostrar datos: {str(ex)}", ft.Colors.RED)
+            print(f"Error al mostrar DataFrame: {ex}")
 
-            self.tabs_content_area.content = ft.Column(
-                [
-                    ft.Text(
-                        "Análisis Avanzado y Visualizaciones:",
-                        weight=ft.FontWeight.BOLD,
-                    ),
-                    ft.Text("Aquí se mostrarán gráficos y análisis más complejos."),
-                    ft.Divider(),
-                    *plot_elements,
-                ],
-                spacing=10,
-                expand=True,
-                scroll=ft.ScrollMode.ADAPTIVE,
-            )
-        if self.page is not None:
+        if self.page:
+            self.page.update()
+
+    def _on_sort_column(self, e: ft.ControlEvent):
+        """Maneja la ordenación de columnas de la tabla."""
+        # Implementa la lógica de ordenación aquí si es necesario
+        # Esto requeriría obtener el DataFrame activo, ordenarlo y volver a renderizar la tabla.
+        # Por simplicidad, no se implementa completamente en este ejemplo.
+        self.show_notification(f"Ordenando columna: {e.control.label}", ft.Colors.BLUE_GREY_400)
+        if self.page:
+            self.page.update()
+
+    def _generate_sample_plot(self, e=None):
+        """Genera un gráfico de ejemplo utilizando plot_generator."""
+        df = self.app_state.get_active_dataframe()
+
+        if df is None:
+            self.plot_container.content = ft.Text("Cargue un archivo para generar gráficos.")
+            self.show_notification("No hay datos para generar gráficos.", ft.Colors.ORANGE)
+            if self.page:
+                self.page.update()
+            return
+
+        # Ejemplo: Intenta generar un histograma de la primera columna numérica
+        numeric_cols = df.select_dtypes(include=['number']).columns
+        if not numeric_cols.empty:
+            column_to_plot = numeric_cols[0]
+            try:
+                # plot_generator.generate_histogram debería devolver un control de Flet (ej. ft.Image)
+                # o una ruta a una imagen que Flet pueda cargar.
+                # Aquí se asume que genera un ft.Image directamente.
+                plot_control = self.plot_generator.generate_histogram(df, column_to_plot)
+                if plot_control:
+                    # Ensure plot_control is a Control, not a string
+                    controls = [
+                        ft.Text(f"Histograma de '{column_to_plot}':", size=16, weight=ft.FontWeight.BOLD)
+                    ]
+                    if isinstance(plot_control, str):
+                        controls.append(ft.Text(plot_control))
+                    else:
+                        controls.append(plot_control)
+                    self.plot_container.content = ft.Column(
+                        controls,
+                        expand=True,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                    )
+                    self.show_notification(f"Gráfico generado para '{column_to_plot}'.", ft.Colors.GREEN)
+                else:
+                    self.plot_container.content = ft.Text("No se pudo generar el gráfico. Verifique la consola.")
+                    self.show_notification("Error al generar el gráfico.", ft.Colors.RED)
+
+            except Exception as ex:
+                self.plot_container.content = ft.Text(f"Error al generar el gráfico: {str(ex)}", color=ft.Colors.RED)
+                self.show_notification(f"Error al generar gráfico: {str(ex)}", ft.Colors.RED)
+                print(f"Error al generar gráfico: {ex}")
+        else:
+            self.plot_container.content = ft.Text("No hay columnas numéricas para generar un gráfico de ejemplo.")
+            self.show_notification("No hay columnas numéricas para gráficos.", ft.Colors.ORANGE)
+
+        if self.page:
             self.page.update()

@@ -1,14 +1,21 @@
-import flet as ft
-import sys
 import os
+import sys
+import flet as ft
 
-# Añadir el directorio raíz del proyecto al sys.path
+# --- BLOQUE DE CONFIGURACIÓN DE RUTAS AL INICIO ---
+# Esto debe ir antes de cualquier import de módulos locales (views, core)
+# para evitar el error E402 (module level import not at top of file)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(
     os.path.join(current_dir, "..")
-)  
-sys.path.insert(0, project_root)
+)  # Sube un nivel desde 'app'
 
+# Añadir solo si no está ya en sys.path para evitar duplicados
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+# -------------------------------------------------
+
+# Importar las clases de vistas
 from views.bar_navigation import create_navigation_rail
 from views.home_view import HomePage
 from views.file_upload_view import FileUploadPage
@@ -24,7 +31,9 @@ from core.data_loader import DataLoader
 from core.data_analyzer import DataAnalyzer
 from core.query_engine import QueryEngine
 from core.plot_generator import PlotGenerator
+from core.app_state import AppState
 
+# Importar constantes
 from constants import (
     VIEW_HOME,
     VIEW_UPLOAD,
@@ -37,48 +46,14 @@ from constants import (
 )
 
 
-class AppState:
-    """
-    Una clase simple para manejar el estado compartido de la aplicación.
-    Almacena el DataFrame cargado y el nombre del archivo.
-    """
-
-    def __init__(self):
-        self.df = None  # Aquí se almacenará el DataFrame de Pandas
-        self.loaded_file_name = None  # Para almacenar el nombre del archivo cargado
-        self.current_theme = ft.ThemeMode.LIGHT  # Tema actual
-
-    def load_dataframe(self, dataframe, file_name=None):
-        """Carga el DataFrame y el nombre del archivo en el estado."""
-        self.df = dataframe
-        self.loaded_file_name = file_name
-        print(
-            f"AppState: DataFrame cargado desde {file_name if file_name else 'memoria'}"
-        )
-
-    def get_dataframe(self):
-        """Retorna el DataFrame cargado."""
-        return self.df
-
-    def get_loaded_file_name(self):
-        """Retorna el nombre del archivo cargado."""
-        return self.loaded_file_name
-
-    def toggle_theme(self):
-        """Alterna entre tema claro y oscuro."""
-        self.current_theme = (
-            ft.ThemeMode.LIGHT
-            if self.current_theme == ft.ThemeMode.DARK
-            else ft.ThemeMode.DARK
-        )
-        return self.current_theme
-
-
 def main(page: ft.Page):
     # Configuración inicial de la página
-    page.title = "Data Análisis App - MugenC-Data"
+    page.window_icon = "assets/icon.png" # type: ignore
+    page.title = "MugenC-Data"
     page.theme_mode = ft.ThemeMode.LIGHT
     page.padding = ft.padding.only(left=10)
+    page.window_width = 1200  # type: ignore
+    page.window_height = 800  # type: ignore
 
     # Estado de la aplicación
     app_state = AppState()
@@ -88,6 +63,7 @@ def main(page: ft.Page):
     data_analyzer = DataAnalyzer()
     query_engine = QueryEngine()
     plot_generator = PlotGenerator()
+    # file_processor = FileProcessor() # F841: Comentado/Eliminado porque no se usa en main.py
 
     # Referencia al NavigationRail
     navigation_rail_ref = ft.Ref[ft.NavigationRail]()
@@ -124,12 +100,12 @@ def main(page: ft.Page):
     query_page = QueryPage(page, app_state, query_engine=query_engine)
     library_page = LibraryPage(page, app_state)
     about_page = AboutPage(page, app_state)
-    export_pdf_page = ExportPDFPage(page, app_state)
+    export_pdf_page = ExportPDFPage(page, app_state) # Aquí podrías pasar file_processor si lo necesitas
     search_page = SearchPage(page, app_state)
 
     # Función para cambiar de vista
     def change_view(selected_route):
-        nonlocal main_content_area
+        # nonlocal main_content_area # F824: Eliminado porque solo modificas atributos, no reasignes la variable
         print(f"Cambiando vista a: {selected_route}")
 
         # Asigna la instancia de la vista directamente, ya que ahora son ft.Container

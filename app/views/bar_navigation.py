@@ -28,14 +28,14 @@ def create_navigation_rail(
             label="Buscar",
         ),
         ft.NavigationRailDestination(  # Índice 3: Cargar Archivo
-            icon=ft.Icons.FOLDER_OPEN_OUTLINED,
-            selected_icon=ft.Icons.FOLDER_OPEN,
-            label="Cargar Archivo",
+            icon=ft.Icons.DATASET_OUTLINED,
+            selected_icon=ft.Icons.DATASET,
+            label="Cargar Dataset",
         ),
         ft.NavigationRailDestination(  # Índice 4: Análisis Dataset (VIEW_DISPLAY)
             icon=ft.Icons.ANALYTICS_OUTLINED,  # Icono sugerido para análisis
             selected_icon=ft.Icons.ANALYTICS,
-            label="Análisis Dataset",
+            label="Análisis Personalizado",
         ),
         ft.NavigationRailDestination(  # Índice 5: Consultas SQL (VIEW_QUERY)
             icon=ft.Icons.QUERY_STATS_OUTLINED,  # Icono sugerido para consultas
