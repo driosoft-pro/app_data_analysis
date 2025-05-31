@@ -3,17 +3,14 @@ import sys
 import flet as ft
 
 # --- BLOQUE DE CONFIGURACIÓN DE RUTAS AL INICIO ---
-# Esto debe ir antes de cualquier import de módulos locales (views, core)
-# para evitar el error E402 (module level import not at top of file)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(
     os.path.join(current_dir, "..")
-)  # Sube un nivel desde 'app'
+)  
 
-# Añadir solo si no está ya en sys.path para evitar duplicados
+# Evitar duplicados
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
-# -------------------------------------------------
 
 # Importar las clases de vistas
 from views.bar_navigation import create_navigation_rail
@@ -63,7 +60,6 @@ def main(page: ft.Page):
     data_analyzer = DataAnalyzer()
     query_engine = QueryEngine()
     plot_generator = PlotGenerator()
-    # file_processor = FileProcessor() # F841: Comentado/Eliminado porque no se usa en main.py
 
     # Referencia al NavigationRail
     navigation_rail_ref = ft.Ref[ft.NavigationRail]()
@@ -76,22 +72,19 @@ def main(page: ft.Page):
         expand=True,
     )
 
-    # Rutas de vista (ordenadas para coincidir con NavigationRail)
-    # El orden aquí DEBE coincidir con el orden de los destinos en bar_navigation.py
-    # (después del botón de tema, que es el índice 0 del rail)
+    # Rutas de vista el orden debe coincidir con NavigationRail
     view_routes_by_index = [
-        VIEW_HOME,  # Corresponde a rail_index 1
-        VIEW_SEARCH,  # Corresponde a rail_index 2
-        VIEW_UPLOAD,  # Corresponde a rail_index 3
+        VIEW_HOME,     # Corresponde a rail_index 1
+        VIEW_SEARCH,   # Corresponde a rail_index 2
+        VIEW_UPLOAD,   # Corresponde a rail_index 3
         VIEW_DISPLAY,  # Corresponde a rail_index 4
-        VIEW_QUERY,  # Corresponde a rail_index 5
-        VIEW_EXPORT,  # Corresponde a rail_index 6
+        VIEW_QUERY,    # Corresponde a rail_index 5
+        VIEW_EXPORT,   # Corresponde a rail_index 6
         VIEW_LIBRARY,  # Corresponde a rail_index 7
-        VIEW_ABOUT,  # Corresponde a rail_index 8
+        VIEW_ABOUT,    # Corresponde a rail_index 8
     ]
 
-    # Instancias de las vistas, pasando app_state y las clases de core/
-    # Es crucial pasar las instancias de core a las vistas que las usarán
+    # Instancias de las vistas
     home_page = HomePage(page, app_state)
     file_upload_page = FileUploadPage(page, app_state, data_loader=data_loader)
     data_display_page = DataDisplayPage(
@@ -105,11 +98,9 @@ def main(page: ft.Page):
 
     # Función para cambiar de vista
     def change_view(selected_route):
-        # nonlocal main_content_area # F824: Eliminado porque solo modificas atributos, no reasignes la variable
         print(f"Cambiando vista a: {selected_route}")
 
-        # Asigna la instancia de la vista directamente, ya que ahora son ft.Container
-        # Esto es clave: NO LLAMAR A .build() aquí.
+        # Asigna la instancia de la vista directamente
         if selected_route == VIEW_HOME:
             main_content_area.content = home_page
         elif selected_route == VIEW_UPLOAD:
@@ -133,7 +124,7 @@ def main(page: ft.Page):
 
         page.update()
 
-    # Funciones para el tema
+    # Funciones para cambiar el tema
     def toggle_theme():
         page.theme_mode = app_state.toggle_theme()
         update_theme_icon()
@@ -152,7 +143,7 @@ def main(page: ft.Page):
                     destinations[0].icon = ft.Icons.DARK_MODE_OUTLINED
                     destinations[0].selected_icon = ft.Icons.DARK_MODE
                     destinations[0].label = "Tema oscuro"
-                page.update()  # Asegurarse de que el icono se actualice
+                page.update()  
 
     # Función para alternar la barra de navegación
     def toggle_navigation_rail(e):
