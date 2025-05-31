@@ -1,5 +1,11 @@
 # Analizador de Datos con Python y Flet
 
+Este proyecto es una aplicación de escritorio y web construida con [Python](https://www.python.org/) y [Flet](https://flet.dev/) para facilitar el análisis básico de datasets en formato CSV. Permite cargar archivos, visualizar datos, realizar consultas personalizadas y generar gráficos estadísticos de manera intuitiva.
+
+---
+
+## 📸 Screenshots
+
 ###  home view theme light
 ![homeDark.png](app/assets/img/homeLight.png)
 
@@ -14,9 +20,6 @@
 
 ## views about
 ![homeDark.png](app/assets/img/about.png)
-
-
-Este proyecto es una aplicación de escritorio y web construida con [Python](https://www.python.org/) y [Flet](https://flet.dev/) para facilitar el análisis básico de datasets en formato CSV. Permite cargar archivos, visualizar datos, realizar consultas personalizadas y generar gráficos estadísticos de manera intuitiva.
 
 ---
 
