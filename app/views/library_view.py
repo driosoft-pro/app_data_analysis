@@ -78,4 +78,4 @@ class LibraryPage(ft.Container):  # Hereda de ft.Container
             horizontal_alignment=ft.CrossAxisAlignment.START,
         )
 
-        return content_column  # Retorna la columna directamente
+        return content_column

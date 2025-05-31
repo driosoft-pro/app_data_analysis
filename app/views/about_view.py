@@ -2,14 +2,16 @@ import flet as ft
 import webbrowser
 
 
-class AboutPage(ft.Container):  # Hereda de ft.Container
+class AboutPage(ft.Container):  
+    """Página de Acerca de"""
+    
     def __init__(self, page: ft.Page, app_state):
         super().__init__(padding=20, expand=True, alignment=ft.alignment.top_left)
         self.page = page
         self.app_state = app_state
         self.content = (
             self._build_content()
-        )  # Establece el contenido inicial del contenedor
+        )  
 
     def _build_content(self):  # Renombrado de build a _build_content
         """

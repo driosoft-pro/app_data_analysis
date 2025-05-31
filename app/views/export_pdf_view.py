@@ -1,10 +1,6 @@
+import os
 import flet as ft
-import pandas as pd
-import os  # Para operaciones de archivo
-
-# Puedes necesitar importar librerías para la generación de PDF aquí,
-# por ejemplo, fpdf2: pip install fpdf2
-# from fpdf import FPDF
+from fpdf import FPDF
 
 
 class ExportPDFPage(ft.Container):  # Hereda de ft.Container
@@ -16,13 +12,13 @@ class ExportPDFPage(ft.Container):  # Hereda de ft.Container
     def __init__(self, page: ft.Page, app_state):
         super().__init__(padding=20, expand=True, alignment=ft.alignment.top_left)
         self.page = page
-        self.app_state = app_state  # Acceso al estado de la app para obtener datos
+        self.app_state = app_state
         self.export_status_text = ft.Text("")
         self.content = (
             self._build_content()
-        )  # Establece el contenido inicial del contenedor
+        )
 
-    def _build_content(self):  # Renombrado de build a _build_content
+    def _build_content(self):
         """
         Construye y retorna el control raíz para la vista de Exportar PDF.
         """
@@ -66,8 +62,11 @@ class ExportPDFPage(ft.Container):  # Hereda de ft.Container
         Maneja el evento de clic del botón para exportar a PDF.
         Aquí es donde irá la lógica principal de generación del PDF.
         """
-        df = self.app_state.get_dataframe()
-        file_name = self.app_state.get_loaded_file_name()
+
+        # Usa get_active_dataframe para los datos manipulados
+        df = self.app_state.get_active_dataframe()
+        # Usa el nombre del archivo original para el título del PDF
+        file_name = self.app_state.get_original_dataframe_name()
 
         if df is None:
             self.export_status_text.value = (
@@ -84,40 +83,44 @@ class ExportPDFPage(ft.Container):  # Hereda de ft.Container
             self.page.update()
 
         try:
-            # --- Lógica REAL para generar el PDF (ejemplo con fpdf2) ---
-            # from fpdf import FPDF
-            # pdf = FPDF()
-            # pdf.add_page()
-            # pdf.set_font("Arial", size=12)
-            # pdf.cell(200, 10, txt="Informe de Análisis de Datos", ln=True, align="C")
-            # pdf.cell(200, 10, txt=f"Datos del archivo: {file_name if file_name else 'No especificado'}", ln=True)
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial", size=12)
+            pdf.cell(200, 10, "Informe de Análisis de Datos", ln=True, align="C")
+            pdf.cell(200, 10, f"Datos del archivo: {file_name if file_name else 'No especificado'}", ln=True)
 
-            # # Añadir tabla (ejemplo simplificado, necesitarías iterar sobre el df)
-            # # pdf.ln(10) # Salto de línea
-            # # pdf.set_font("Arial", size=10, style='B')
-            # # for col in df.columns:
-            # #     pdf.cell(40, 10, col, border=1)
-            # # pdf.ln()
-            # # pdf.set_font("Arial", size=10)
-            # # for index, row in df.head(5).iterrows(): # Solo las primeras 5 filas para ejemplo
-            # #     for col in df.columns:
-            # #         pdf.cell(40, 10, str(row[col]), border=1)
-            # #     pdf.ln()
+            # Add table headers
+            pdf.ln(10) # Line break
+            pdf.set_font("Arial", size=10, style='B')
+            # Adjust column width based on number of columns or content
+            col_width = pdf.w / (len(df.columns) + 1)
+            for col in df.columns:
+                pdf.cell(col_width, 10, str(col), border=1, align='C')
+            pdf.ln()
 
-            # # Define una ruta de guardado (considera guardar en la carpeta 'data/' de tu proyecto)
-            # # Asegúrate de que la carpeta 'data' exista en la raíz de tu proyecto
-            # pdf_output_dir = "data"
-            # os.makedirs(pdf_output_dir, exist_ok=True)
-            # pdf_output_path = os.path.join(pdf_output_dir, f"informe_{file_name.replace('.', '_') if file_name else 'datos'}.pdf")
-            # pdf.output(pdf_output_path)
+            # Add table data (first 10 rows for example)
+            pdf.set_font("Arial", size=8)
+            for index, row in df.head(10).iterrows():
+                for col in df.columns:
+                    # Convert NaN to empty string
+                    cell_content = str(row[col])
+                    # si el contenido de la celda es demasiado largo, lo truncamos
+                    if len(cell_content) > 20:
+                        cell_content = cell_content[:17] + "..."
+                    pdf.cell(col_width, 8, cell_content, border=1)
+                pdf.ln()
+            if len(df) > 10:
+                pdf.cell(200, 10, f"...y {len(df) - 10} filas más. Mostrando solo las primeras 10.", ln=True, align='C')
 
-            # Simulación de éxito
-            import time
+            # Deine donde guardar el PDF
+            pdf_output_dir = "exports"
+            os.makedirs(pdf_output_dir, exist_ok=True)
+            pdf_output_path = os.path.join(pdf_output_dir, f"informe_{file_name.replace('.', '_') if file_name else 'datos'}.pdf")
+            pdf.output(pdf_output_path)
 
-            time.sleep(2)  # Simula tiempo de procesamiento
-            self.export_status_text.value = f"PDF generado exitosamente. (Simulado)"  # Puedes añadir la ruta: {pdf_output_path}
+            self.export_status_text.value = f"PDF generado exitosamente en: {pdf_output_path}"
             self.export_status_text.color = ft.Colors.GREEN_ACCENT_700
-            print("PDF exportado (simulado)")
+            print(f"PDF exportado a: {pdf_output_path}")
 
         except Exception as ex:
             self.export_status_text.value = f"Error al generar el PDF: {ex}"

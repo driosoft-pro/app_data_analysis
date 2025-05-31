@@ -5,12 +5,16 @@ def create_navigation_rail(
     page: ft.Page,
     on_change_view,
     on_toggle_theme,
-    view_routes_by_index,  # Esta lista debe coincidir con el orden de los destinos de vista
+    view_routes_by_index,  
     rail_state: ft.Ref[ft.NavigationRail],
-    on_toggle_rail=None,  # Este parámetro no se usa en la función, se puede eliminar si no es necesario
+    on_toggle_rail=None,  
 ):
+    
+    """
+        Crea la barra de navegación lateral.
+    """
+    
     # Definición de los destinos de navegación.
-    # El orden aquí DEBE coincidir con el orden en view_routes_by_index (después del botón de tema).
     destinations = [
         ft.NavigationRailDestination(  # Índice 0: Botón de Tema
             icon=ft.Icons.DARK_MODE_OUTLINED,
@@ -32,13 +36,13 @@ def create_navigation_rail(
             selected_icon=ft.Icons.DATASET,
             label="Cargar Dataset",
         ),
-        ft.NavigationRailDestination(  # Índice 4: Análisis Dataset (VIEW_DISPLAY)
-            icon=ft.Icons.ANALYTICS_OUTLINED,  # Icono sugerido para análisis
+        ft.NavigationRailDestination(  # Índice 4: Análisis Dataset 
+            icon=ft.Icons.ANALYTICS_OUTLINED,  
             selected_icon=ft.Icons.ANALYTICS,
             label="Análisis Personalizado",
         ),
-        ft.NavigationRailDestination(  # Índice 5: Consultas SQL (VIEW_QUERY)
-            icon=ft.Icons.QUERY_STATS_OUTLINED,  # Icono sugerido para consultas
+        ft.NavigationRailDestination(  # Índice 5: Consultas SQL
+            icon=ft.Icons.QUERY_STATS_OUTLINED,
             selected_icon=ft.Icons.QUERY_STATS,
             label="Consultas SQL",
         ),
@@ -67,9 +71,7 @@ def create_navigation_rail(
             # Restablecemos la selección para que no quede marcado visualmente
             e.control.selected_index = None
         elif selected_index is not None and selected_index > 0:
-            # Ajustamos el índice porque el primer elemento (índice 0) es el botón de tema.
-            # Los destinos de vista reales comienzan en el índice 1 del rail,
-            # que corresponde al índice 0 de view_routes_by_index.
+            # Cambia la vista según el Índice seleccionado
             route_to_load = view_routes_by_index[selected_index - 1]
             on_change_view(route_to_load)
         else:

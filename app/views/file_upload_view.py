@@ -17,7 +17,7 @@ class FileUploadPage(ft.Container):
         self.app_state = app_state
         self.data_loader = data_loader
 
-        # Elementos UI (instantiated here)
+        # Elementos de la UI
         self.file_path_text = ft.Text("Ningún archivo seleccionado.", size=14)
         self.upload_status_text = ft.Text("", size=14, color=ft.Colors.GREY_600)
         self.progress_bar = ft.ProgressBar(width=400, visible=False)
@@ -27,9 +27,8 @@ class FileUploadPage(ft.Container):
             visible=False
         )
 
-        # FilePicker (instantiated here)
-        # Note: on_result will be set by the config class, but we need to pass a reference
-        self.file_picker = ft.FilePicker() # Initialize without on_result here
+        # Inicializar el selector de archivos
+        self.file_picker = ft.FilePicker()
         self.page.overlay.append(self.file_picker)
 
         # Area de resultados para VALIDACIÓN del Dataset ORIGINAL
@@ -42,7 +41,7 @@ class FileUploadPage(ft.Container):
 
         # Area de resultados para MANIPULACIÓN (Copia, Duplicados, Tipos Objeto, Manejo Nulos, Renombrar Columnas)
         self.manipulation_results = ft.Column(
-            [ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)], # RENOMBRADO AQUÍ
+            [ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)],
             scroll=ft.ScrollMode.ALWAYS,
             expand=True,
             horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
@@ -339,13 +338,13 @@ class FileUploadPage(ft.Container):
                 ft.Divider(height=20),
 
                 # Sección de Manipulación de Datos Básicos
-                ft.Text("Manipulación y Limpieza de Datos Básicos", size=18, weight=ft.FontWeight.BOLD), # RENOMBRADO AQUÍ
+                ft.Text("Manipulación y Limpieza de Datos Básicos", size=18, weight=ft.FontWeight.BOLD),
                 self.data_manipulation_buttons,
-                self.object_type_conversion_controls, # Controles de conversión de tipo
-                self.null_handling_controls, # Controles de manejo de nulos
-                self.rename_column_controls, # Controles de renombrado de columna
+                self.object_type_conversion_controls,
+                self.null_handling_controls,
+                self.rename_column_controls,
 
-                ft.Container( # Contenedor para resultados de manipulación
+                ft.Container(
                     self.manipulation_results,
                     border=ft.border.all(1, ft.Colors.GREY_300),
                     border_radius=5,
@@ -356,8 +355,8 @@ class FileUploadPage(ft.Container):
 
                 ft.Divider(height=20),
 
-                # Sección de Validación de Datos Manipulados (Copia del Dataset)
-                ft.Text("Validación de Datos Manipulados (Copia del Dataset)", size=18, weight=ft.FontWeight.BOLD),
+                # Sección de Validación de Datos Manipulados de Copia del Dataset
+                ft.Text("Validación de Datos Manipulados Copia del Dataset", size=18, weight=ft.FontWeight.BOLD),
                 self.copied_data_validation_buttons,
 
                 ft.Container( # Contenedor para resultados de validación MANIPULADA
@@ -370,19 +369,20 @@ class FileUploadPage(ft.Container):
                 ),
 
                 ft.Divider(height=20),
-                # bloque para exportación
-                # ft.Text("Exportar Dataset Manipulado", size=18, weight=ft.FontWeight.BOLD),
-                #ft.ResponsiveRow([
-                #    ft.ElevatedButton(
-                #        "Exportar CSV",
-                #        on_click=self.config._export_dataframe_csv,
-                #        icon=ft.Icons.SAVE,
-                #        tooltip="Exporta el DataFrame manipulado como CSV",
-                #        col={"sm": 12, "md": 6, "lg": 2}
-                #    ),
-                #], spacing=10),
 
-                #ft.Divider(height=20),
+                # Sección de Exportación
+                ft.Text("Exportar Dataset Manipulado", size=18, weight=ft.FontWeight.BOLD),
+                ft.ResponsiveRow([
+                    ft.ElevatedButton(
+                        "Exportar CSV",
+                        on_click=self.config._export_dataframe_csv,
+                        icon=ft.Icons.SAVE,
+                        tooltip="Exporta el DataFrame manipulado como CSV",
+                        col={"sm": 12, "md": 6, "lg": 2}
+                    ),
+                ], spacing=10),
+
+                ft.Divider(height=20),
             ],
             spacing=10,
             expand=True,

@@ -6,6 +6,8 @@ from core.data_loader import DataLoader
 
 
 class FileUploadConfig():
+    """Configuración para la carga de archivos."""
+    
     def __init__(self, page: ft.Page, app_state, file_picker: ft.FilePicker,
                  upload_status_text: ft.Text, file_path_text: ft.Text,
                  progress_bar: ft.ProgressBar, loading_indicator: ft.Row,
@@ -61,7 +63,7 @@ class FileUploadConfig():
         self.object_type_conversion_controls.visible = False
         self.object_type_conversion_controls.controls.clear()
         self.null_handling_controls.visible = False
-        self.rename_column_controls.visible = False # Asegura que los controles de renombrado estén ocultos
+        self.rename_column_controls.visible = False
         if self.page:
             self.page.update()
 
@@ -88,17 +90,18 @@ class FileUploadConfig():
             ft.Text("Resultados de Validación del Dataset Original:", weight=ft.FontWeight.BOLD)
         ]
         self.manipulation_results.controls = [
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         self.manipulated_validation_results.controls = [ # Limpia el nuevo contenedor
             ft.Text("Resultados de Validación del Dataset Manipulado:", weight=ft.FontWeight.BOLD)
         ]
+        # Limpia los resultados de manipulación
         self.object_type_conversion_controls.controls.clear()
         self.object_type_conversion_controls.visible = False
-        self.null_handling_controls.visible = False # Oculta los controles de nulos
-        self.rename_column_controls.visible = False # Oculta los controles de renombrado
-        self.rename_column_dropdown.value = None # Limpia la selección
-        self.new_column_name_textfield.value = "" # Limpia el campo de texto
+        self.null_handling_controls.visible = False
+        self.rename_column_controls.visible = False
+        self.rename_column_dropdown.value = None
+        self.new_column_name_textfield.value = ""
         if self.page:
             self.page.update()
 
@@ -145,6 +148,7 @@ class FileUploadConfig():
 
     def show_data_info(self, info_type):
         """Muestra diferentes tipos de información sobre los datos originales (o la copia si no se ha creado una)."""
+        
         # Limpia solo los resultados de validación original
         self.validation_results.controls = [
             ft.Text("Resultados de Validación del Dataset Original:", weight=ft.FontWeight.BOLD)
@@ -213,7 +217,8 @@ class FileUploadConfig():
             self.show_notification(f"Error en validación: {str(e)}", ft.Colors.RED)
 
     def show_manipulated_data_info(self, info_type):
-        """Muestra diferentes tipos de información sobre el DataFrame MANIPULADO (la copia)."""
+        """Muestra diferentes tipos de información sobre el DataFrame MANIPULADO la copia."""
+        
         # Limpia solo los resultados de validación manipulada
         self.manipulated_validation_results.controls = [
             ft.Text("Resultados de Validación del Dataset Manipulado:", weight=ft.FontWeight.BOLD)
@@ -284,8 +289,10 @@ class FileUploadConfig():
 
     def _create_dataframe_copy(self, e=None):
         """Crea una copia del DataFrame original para manipulación."""
-        self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+        
+        # Limpia solo los resultados de manipulación
+        self.manipulation_results.controls = [ 
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         df_original = self.app_state.get_original_dataframe()
         if df_original is None:
@@ -305,15 +312,18 @@ class FileUploadConfig():
         """
         Muestra las filas duplicadas en el DataFrame original o copiado.
         """
+        
+        # Limpia solo los resultados de validación original
         if target_df_type == "original":
-            self.validation_results.controls = [ # Limpia solo los resultados de validación original
+            self.validation_results.controls = [ 
                 ft.Text("Resultados de Validación del Dataset Original:", weight=ft.FontWeight.BOLD)
             ]
             df = self.app_state.get_original_dataframe()
             result_container = self.validation_results
             notification_prefix = "Original"
         else: # target_df_type == "manipulated" o cualquier otro
-            self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
+            # Limpia solo los resultados de manipulación
+            self.manipulation_results.controls = [ 
                 ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
             ]
             df = self.app_state.get_active_dataframe()
@@ -331,12 +341,12 @@ class FileUploadConfig():
             result += duplicates.head().to_string()
             if len(duplicates) > 5:
                 result += "\n... (mostrando solo las primeras 5)"
-            result_container.controls.append( # Usa el contenedor correcto
+            result_container.controls.append(
                 ft.Text(result, selectable=True)
             )
             self.show_notification(f"Se encontraron {len(duplicates)} filas duplicadas en el dataset {notification_prefix.lower()}.", ft.Colors.BLUE)
         else:
-            result_container.controls.append( # Usa el contenedor correcto
+            result_container.controls.append(
                 ft.Text(f"✅ No se encontraron filas duplicadas en el DataFrame {notification_prefix}.")
             )
             self.show_notification(f"No se encontraron filas duplicadas en el dataset {notification_prefix.lower()}.", ft.Colors.GREEN)
@@ -346,8 +356,10 @@ class FileUploadConfig():
 
     def _delete_duplicates(self, e=None):
         """Elimina las filas duplicadas del DataFrame copiado."""
-        self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+        
+        # Limpia solo los resultados de manipulación
+        self.manipulation_results.controls = [ 
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         df = self.app_state.get_active_dataframe()
         if df is None:
@@ -359,7 +371,8 @@ class FileUploadConfig():
         rows_after_dedup = len(df)
 
         if initial_rows > rows_after_dedup:
-            self.app_state.load_dataframe_copy(df) # Actualiza el DataFrame copiado en AppState
+            # Actualiza el DataFrame copiado en AppState
+            self.app_state.load_dataframe_copy(df) 
             self.show_notification(f"Se eliminaron {initial_rows - rows_after_dedup} filas duplicadas.", ft.Colors.GREEN)
             self.manipulation_results.controls.append(
                 ft.Text(f"🗑️ Se eliminaron {initial_rows - rows_after_dedup} filas duplicadas.\n"
@@ -381,8 +394,10 @@ class FileUploadConfig():
         Identifica columnas de tipo 'object' y permite al usuario seleccionar
         un nuevo tipo de dato para conversión.
         """
-        self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+        
+        # Limpia solo los resultados de manipulación
+        self.manipulation_results.controls = [
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         # Oculta otros controles de manipulación
         self.object_type_conversion_controls.controls.clear()
@@ -425,10 +440,10 @@ class FileUploadConfig():
                     ft.dropdown.Option("float"),
                     ft.dropdown.Option("datetime"),
                     ft.dropdown.Option("category"),
-                    ft.dropdown.Option("string") # Tipo string explícito para pandas moderno
+                    ft.dropdown.Option("string")
                 ],
                 hint_text="Convertir a...",
-                data=col # Almacena el nombre de la columna en data para fácil acceso
+                data=col
             )
             self.object_type_conversion_controls.controls.append(
                 ft.Column([
@@ -448,15 +463,17 @@ class FileUploadConfig():
 
     def _convert_column_type(self, e):
         """Maneja la conversión de tipo de columna seleccionada."""
-        self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+        
+        # Limpia solo los resultados de manipulación
+        self.manipulation_results.controls = [
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         df = self.app_state.get_active_dataframe()
         if df is None:
             self.show_notification("No hay datos para convertir.", ft.Colors.ORANGE)
             return
 
-        dropdown = e.control.data # Obtiene el control dropdown de los datos del botón
+        dropdown = e.control.data
         column_name = dropdown.data
         selected_type = dropdown.value
 
@@ -475,10 +492,11 @@ class FileUploadConfig():
                 df[column_name] = pd.to_datetime(df[column_name], errors='coerce')
             elif selected_type == "category":
                 df[column_name] = df[column_name].astype('category')
-            elif selected_type == "string": # Tipo string explícito para pandas moderno
+            elif selected_type == "string":
                 df[column_name] = df[column_name].astype(str)
-
-            self.app_state.load_dataframe_copy(df) # Actualiza el DataFrame copiado en AppState
+            
+            # Actualiza el DataFrame copiado en AppState
+            self.app_state.load_dataframe_copy(df)
             self.show_notification(
                 f"Columna '{column_name}' convertida de '{original_dtype}' a '{selected_type}' exitosamente.",
                 ft.Colors.GREEN
@@ -505,8 +523,10 @@ class FileUploadConfig():
         """
         Muestra los controles para el manejo de nulos y carga las columnas del DataFrame.
         """
-        self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+        
+        # Limpia solo los resultados de manipulación
+        self.manipulation_results.controls = [
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         # Oculta otros controles de manipulación
         self.null_handling_controls.visible = True
@@ -525,8 +545,8 @@ class FileUploadConfig():
         column_options = [ft.dropdown.Option("Todas las columnas")]
         column_options.extend([ft.dropdown.Option(col) for col in df.columns])
         self.null_handling_column_dropdown.options = column_options
-        self.null_handling_column_dropdown.value = "Todas las columnas" # Valor por defecto
-        self.null_handling_strategy_dropdown.value = None # Limpiar selección de estrategia
+        self.null_handling_column_dropdown.value = "Todas las columnas"
+        self.null_handling_strategy_dropdown.value = None
 
         self.show_notification("Seleccione opciones para el manejo de nulos.", ft.Colors.BLUE)
         if self.page:
@@ -542,8 +562,10 @@ class FileUploadConfig():
         """
         Aplica la estrategia de manejo de nulos seleccionada al DataFrame activo.
         """
-        self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+        
+        # Limpia solo los resultados de manipulación
+        self.manipulation_results.controls = [
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         df = self.app_state.get_active_dataframe()
         if df is None:
@@ -558,7 +580,8 @@ class FileUploadConfig():
             return
 
         try:
-            initial_nulls = df.isnull().sum().sum() # Total de nulos antes de la operación
+            # Total de nulos antes de la operación
+            initial_nulls = df.isnull().sum().sum()
             initial_rows = len(df)
 
             if selected_strategy == "Reemplazar '?' con NaN":
@@ -603,7 +626,8 @@ class FileUploadConfig():
                 self.show_notification("Estrategia no reconocida.", ft.Colors.RED)
                 return
 
-            self.app_state.load_dataframe_copy(df) # Actualiza el DataFrame copiado
+            # Actualiza el DataFrame copiado
+            self.app_state.load_dataframe_copy(df)
             final_nulls = df.isnull().sum().sum()
             final_rows = len(df)
 
@@ -615,7 +639,7 @@ class FileUploadConfig():
 
             # Muestra información de nulos después de la operación en la sección de manipulados
             self.show_manipulated_data_info("nulls_percent")
-            self._hide_null_handling_options() # Ocultar controles después de aplicar
+            self._hide_null_handling_options()
 
         except Exception as ex:
             self.show_notification(f"Error al aplicar manejo de nulos: {str(ex)}", ft.Colors.RED)
@@ -630,8 +654,10 @@ class FileUploadConfig():
         """
         Muestra los controles para renombrar una columna y carga las columnas del DataFrame.
         """
-        self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+        
+        # Limpia solo los resultados de manipulación
+        self.manipulation_results.controls = [
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         # Oculta otros controles de manipulación
         self.object_type_conversion_controls.visible = False
@@ -649,8 +675,8 @@ class FileUploadConfig():
         # Cargar opciones de columnas en el dropdown de renombrado
         column_options = [ft.dropdown.Option(col) for col in df.columns]
         self.rename_column_dropdown.options = column_options
-        self.rename_column_dropdown.value = None # Limpiar selección
-        self.new_column_name_textfield.value = "" # Limpiar campo de texto
+        self.rename_column_dropdown.value = None
+        self.new_column_name_textfield.value = ""
 
         self.show_notification("Seleccione una columna para renombrar.", ft.Colors.BLUE)
         if self.page:
@@ -666,8 +692,10 @@ class FileUploadConfig():
         """
         Aplica el renombramiento de la columna seleccionada.
         """
-        self.manipulation_results.controls = [ # Limpia solo los resultados de manipulación
-            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD) # RENOMBRADO AQUÍ
+        
+        # Limpia solo los resultados de manipulación
+        self.manipulation_results.controls = [ 
+            ft.Text("Resultados de Manipulación de Datos Básicos:", weight=ft.FontWeight.BOLD)
         ]
         df = self.app_state.get_active_dataframe()
         if df is None:
@@ -675,7 +703,7 @@ class FileUploadConfig():
             return
 
         old_column_name = self.rename_column_dropdown.value
-        new_column_name = (self.new_column_name_textfield.value or "").strip() # Quitar espacios en blanco
+        new_column_name = (self.new_column_name_textfield.value or "").strip()
 
         if not old_column_name:
             self.show_notification("Por favor, seleccione una columna existente.", ft.Colors.ORANGE)
@@ -692,7 +720,9 @@ class FileUploadConfig():
 
         try:
             df.rename(columns={old_column_name: new_column_name}, inplace=True)
-            self.app_state.load_dataframe_copy(df) # Actualiza el DataFrame copiado
+            
+            # Actualiza el DataFrame copiado
+            self.app_state.load_dataframe_copy(df) 
 
             self.show_notification(f"Columna '{old_column_name}' renombrada a '{new_column_name}' exitosamente.", ft.Colors.GREEN)
             self.manipulation_results.controls.append(
@@ -700,7 +730,7 @@ class FileUploadConfig():
             )
             # Después de renombrar, muestra los nombres de columnas actualizados en la sección de manipulados
             self.show_manipulated_data_info("column_names")
-            self._hide_rename_column_options() # Ocultar controles después de aplicar
+            self._hide_rename_column_options()
 
         except Exception as ex:
             self.show_notification(f"Error al renombrar columna '{old_column_name}': {str(ex)}", ft.Colors.RED)
@@ -760,13 +790,11 @@ class FileUploadConfig():
             border=ft.border.all(1, ft.Colors.GREY_200),
             vertical_lines=ft.BorderSide(1, ft.Colors.GREY_200),
             horizontal_lines=ft.BorderSide(1, ft.Colors.GREY_200),
-            sort_column_index=0, # Opcional: define una columna inicial para ordenar
+            sort_column_index=0,
             sort_ascending=True,
             heading_row_color=ft.Colors.BLUE_GREY_100,
             show_checkbox_column=False,
-            # Explicitly set width to allow horizontal scrolling
-            # You might need to adjust the multiplier (e.g., 150) based on your column content width
-            width=len(preview_df.columns) * 150 if len(preview_df.columns) > 5 else None # Adjust width based on number of columns
+            width=len(preview_df.columns) * 150 if len(preview_df.columns) > 5 else None
         )
 
         # Envuelve la tabla en un ft.Column para darle scroll si es necesario
@@ -774,7 +802,7 @@ class FileUploadConfig():
             controls=[data_table],
             scroll=ft.ScrollMode.ADAPTIVE,
             expand=True,
-            height=300 # Altura fija para la tabla, ajusta según necesidad
+            height=300
         )
 
         target_results_container.controls.append(table_container)
@@ -834,8 +862,6 @@ class FileUploadConfig():
         else:
             self.show_notification("Exportación cancelada.", ft.Colors.ORANGE)
 
-        # Restore the original file picker handler
-        # This assumes handle_file_picker_result is the default handler for file selection
-        self.file_picker.on_result = self.handle_file_picker_result # Correctly restore the handler
+        self.file_picker.on_result = self.handle_file_picker_result
         if self.page:
             self.page.update()

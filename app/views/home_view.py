@@ -1,14 +1,18 @@
 import flet as ft
 
 
-class HomePage(ft.Container):  # Hereda de ft.Container
+class HomePage(ft.Container):
+    """
+    Página de inicio
+    """
+    
     def __init__(self, page: ft.Page, app_state):
         super().__init__(padding=20, expand=True, alignment=ft.alignment.top_left)
         self.page = page
         self.app_state = app_state
         self.content = (
             self._build_content()
-        )  # Establece el contenido inicial del contenedor
+        )
 
     def _build_content(self):
         """

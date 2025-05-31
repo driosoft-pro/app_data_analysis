@@ -53,7 +53,6 @@ class DataDisplayPage(ft.Container):
                 tooltip="Genera un gráfico de ejemplo (requiere datos numéricos).",
                 col={"sm": 12, "md": 6, "lg": 3}
             ),
-            # Puedes añadir más botones para diferentes tipos de análisis o gráficos
         ], spacing=10)
 
         # Construir interfaz
@@ -93,7 +92,6 @@ class DataDisplayPage(ft.Container):
 
     def _display_dataframe(self, e=None):
         """Muestra el DataFrame activo en una tabla."""
-        # Usar get_active_dataframe() para obtener el DataFrame que se está manipulando
         df = self.app_state.get_active_dataframe() 
 
         if df is None:
@@ -118,7 +116,7 @@ class DataDisplayPage(ft.Container):
             data_table = ft.DataTable(
                 columns=columns,
                 rows=rows,
-                sort_column_index=0,  # Puedes establecer una columna de ordenación inicial
+                sort_column_index=0,
                 sort_ascending=True,
                 heading_row_color=ft.Colors.GREY_200,
                 data_row_color=ft.Colors.BLUE_GREY_100,
@@ -146,9 +144,6 @@ class DataDisplayPage(ft.Container):
 
     def _on_sort_column(self, e: ft.ControlEvent):
         """Maneja la ordenación de columnas de la tabla."""
-        # Implementa la lógica de ordenación aquí si es necesario
-        # Esto requeriría obtener el DataFrame activo, ordenarlo y volver a renderizar la tabla.
-        # Por simplicidad, no se implementa completamente en este ejemplo.
         self.show_notification(f"Ordenando columna: {e.control.label}", ft.Colors.BLUE_GREY_400)
         if self.page:
             self.page.update()
@@ -164,14 +159,12 @@ class DataDisplayPage(ft.Container):
                 self.page.update()
             return
 
-        # Ejemplo: Intenta generar un histograma de la primera columna numérica
+        # Intenta generar un histograma de la primera columna numérica
         numeric_cols = df.select_dtypes(include=['number']).columns
         if not numeric_cols.empty:
             column_to_plot = numeric_cols[0]
             try:
                 # plot_generator.generate_histogram debería devolver un control de Flet (ej. ft.Image)
-                # o una ruta a una imagen que Flet pueda cargar.
-                # Aquí se asume que genera un ft.Image directamente.
                 plot_control = self.plot_generator.generate_histogram(df, column_to_plot)
                 if plot_control:
                     # Ensure plot_control is a Control, not a string

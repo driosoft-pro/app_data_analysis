@@ -4,7 +4,9 @@ from core.query_engine import QueryEngine
 from app.controls.data_table_custom import DataTableCustom
 
 
-class QueryPage(ft.Container):  # Hereda de ft.Container
+class QueryPage(ft.Container):
+    """Vista para realizar consultas SQL sobre el DataFrame cargado."""
+    
     def __init__(self, page: ft.Page, app_state, query_engine: QueryEngine):
         super().__init__(padding=20, expand=True, alignment=ft.alignment.top_left)
         self.page = page
@@ -37,7 +39,7 @@ class QueryPage(ft.Container):  # Hereda de ft.Container
                 ),
                 self.query_status,
                 ft.Divider(),
-                self.results_table_display,  # Usa tu control personalizado para mostrar resultados
+                self.results_table_display,
             ],
             spacing=15,
             expand=True,
@@ -77,7 +79,7 @@ class QueryPage(ft.Container):  # Hereda de ft.Container
             self.page.update()
 
         try:
-            # --- Lógica REAL de ejecución de consulta con QueryEngine ---
+            # Ejecución de consulta con QueryEngine
             result_df = self.query_engine.execute_query_on_dataframe(
                 df_original, query_str
             )
