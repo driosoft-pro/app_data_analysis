@@ -371,7 +371,7 @@ class FileUploadPage(ft.Container):
 
                 ft.Divider(height=20),
                 # bloque para exportación
-                #ft.Text("Exportar Dataset Manipulado", size=18, weight=ft.FontWeight.BOLD),
+                # ft.Text("Exportar Dataset Manipulado", size=18, weight=ft.FontWeight.BOLD),
                 #ft.ResponsiveRow([
                 #    ft.ElevatedButton(
                 #        "Exportar CSV",
