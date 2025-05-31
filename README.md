@@ -1,9 +1,18 @@
 # Analizador de Datos con Python y Flet
 
+###  home view theme light
 ![homeDark.png](app/assets/img/homeLight.png)
+
+###  home view theme dark
 ![homeDark.png](app/assets/img/homeDark.png)
+
+###  dataset load view
 ![homeDark.png](app/assets/img/analisisBasic.png)
+
+### views library
 ![homeDark.png](app/assets/img/library.png)
+
+## views about
 ![homeDark.png](app/assets/img/about.png)
 
 
