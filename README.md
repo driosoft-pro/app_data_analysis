@@ -169,14 +169,6 @@ pytest                  # Ejecutar todas las pruebas
 pytest -v --tb=short    # Ejecutar pruebas con detalles adicionales
 ```
 
----
-
-# 🗒️ Notas:
-# - Puedes usar `pip freeze > requirements.txt` luego de probar todo.
-# - Si usas `pyproject.toml`, muchas versiones se pueden dejar sin fijar para evitar bloqueos de compatibilidad.
-
----
-
 ## 📜 Licencia
 
 Este proyecto está licenciado bajo la **MIT License**.

@@ -74,3 +74,8 @@ Mantener comentarios claros y útiles dentro del código.
 Incluir un archivo README.md con:
 Descripción general del proyecto.
 Instrucciones de instalación, uso y despliegue.
+
+
+# Notas:
+# - Usar `pip freeze > requirements.txt` luego de probar todo.
+# - Usar `pyproject.toml`, muchas versiones se pueden dejar sin fijar para evitar bloqueos de compatibilidad.
